@@ -47,7 +47,8 @@ std::vector<const xAOD::TruthParticle*> TopsPreFSR(std::vector<const xAOD::Truth
   }
   
   if (Out_T.size() != 0){ return Out_T; }
-  else { return TopsPreFSR(Out_O); }
+  else if (Out_O.size() != 0){ return TopsPreFSR(Out_O); }
+  else { return Out_O; }
 }
 
 
@@ -60,13 +61,6 @@ const xAOD::TruthParticle* TopsPostFSR(const xAOD::TruthParticle* Particles)
   }
   return Particles; 
 }
-
-
-
-
-
-
-
 
 const xAOD::TruthParticle* GetPath(const xAOD::TruthParticle* particle, int k, std::vector<const xAOD::TruthParticle*>* PV, std::vector<int>* PM)
 {
