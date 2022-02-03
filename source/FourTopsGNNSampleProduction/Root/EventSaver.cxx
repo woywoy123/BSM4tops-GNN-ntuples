@@ -43,6 +43,7 @@ namespace top {
       systematicTree -> makeOutputVariable(m_topPostFSR_children_eta, "topPostFSRchildren_eta"); 
       systematicTree -> makeOutputVariable(m_topPostFSR_children_phi, "topPostFSRchildren_phi"); 
       systematicTree -> makeOutputVariable(m_topPostFSR_children_charge, "topPostFSRchildren_charge"); 
+      systematicTree -> makeOutputVariable(m_topPostFSR_children_pdgid, "topPostFSRchildren_pdgid"); 
 
       systematicTree -> makeOutputVariable(m_TruthJets_pt, "truthjet_pt"); 
       systematicTree -> makeOutputVariable(m_TruthJets_e, "truthjet_e"); 
@@ -143,7 +144,7 @@ namespace top {
         AllParents.insert(AllParents.end(), ghost_P.begin(), ghost_P.end());  
 
         //if ( jet -> pt() < PT_Cut || fabs(jet -> eta()) > ETA_Cut){continue;}
-        m_GhostTruthJetMap.push_back({0}); 
+        m_GhostTruthJetMap.push_back({}); 
         m_TruthJets_pt.push_back( jet -> pt() ); 
         m_TruthJets_e.push_back( jet -> e() ); 
         m_TruthJets_eta.push_back( jet -> eta() ); 
