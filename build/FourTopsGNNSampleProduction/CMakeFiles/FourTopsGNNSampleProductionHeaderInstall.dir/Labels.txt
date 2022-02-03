@@ -1,0 +1,5 @@
+# Target labels
+ FourTopsGNNSampleProduction
+# Source files and their labels
+/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/build/x86_64-centos7-gcc8-opt/include/FourTopsGNNSampleProduction
+/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/build/x86_64-centos7-gcc8-opt/include/FourTopsGNNSampleProduction.rule

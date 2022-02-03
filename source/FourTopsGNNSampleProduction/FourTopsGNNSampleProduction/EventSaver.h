@@ -51,7 +51,7 @@ namespace top {
       std::vector<float> m_TruthJets_pdgid; 
         
       // Truth jet to Ghost top mapping 
-      std::vector<int> m_GhostTruthJetMap; 
+      std::vector<std::vector<int>> m_GhostTruthJetMap; 
 
       // Children from m_truth branch 
       std::vector<std::vector<float>> m_top_children_pt; 
@@ -67,6 +67,7 @@ namespace top {
       std::vector<float> m_top_eta; 
       std::vector<float> m_top_phi; 
       std::vector<int> m_top_charge; 
+      std::vector<int> m_topFromRes; 
 
 
       ClassDefOverride(top::EventSaver, 0); 

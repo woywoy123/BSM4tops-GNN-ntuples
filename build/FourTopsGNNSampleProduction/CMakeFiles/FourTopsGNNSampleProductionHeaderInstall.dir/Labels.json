@@ -1,0 +1,19 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/build/x86_64-centos7-gcc8-opt/include/FourTopsGNNSampleProduction"
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/build/x86_64-centos7-gcc8-opt/include/FourTopsGNNSampleProduction.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"FourTopsGNNSampleProduction"
+		],
+		"name" : "FourTopsGNNSampleProductionHeaderInstall"
+	}
+}

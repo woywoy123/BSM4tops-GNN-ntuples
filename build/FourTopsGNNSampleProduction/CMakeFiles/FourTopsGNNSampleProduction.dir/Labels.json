@@ -1,0 +1,44 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source/FourTopsGNNSampleProduction/Root/EventSaver.cxx"
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source/FourTopsGNNSampleProduction/Root/ParticleID.cxx"
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source/FourTopsGNNSampleProduction/Root/TruthAnalysis.cxx"
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source/FourTopsGNNSampleProduction/Root/LinkDef.h"
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/EventSaver.h"
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/ParticleID.h"
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/TruthAnalysis.h"
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/build/FourTopsGNNSampleProduction/CMakeFiles/FourTopsGNNSampleProductionCintDict.cxx",
+			"labels" : 
+			[
+				"FourTopsGNNSampleProduction"
+			]
+		},
+		{
+			"file" : "/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/build/FourTopsGNNSampleProduction/CMakeFiles/FourTopsGNNSampleProductionCintDict.cxx.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"FourTopsGNNSampleProduction"
+		],
+		"name" : "FourTopsGNNSampleProduction"
+	}
+}

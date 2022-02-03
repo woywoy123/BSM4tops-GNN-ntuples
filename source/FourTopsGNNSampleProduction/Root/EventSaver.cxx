@@ -64,6 +64,7 @@ namespace top {
       systematicTree -> makeOutputVariable(m_top_eta, "truth_top_eta"); 
       systematicTree -> makeOutputVariable(m_top_phi, "truth_top_phi"); 
       systematicTree -> makeOutputVariable(m_top_charge, "truth_top_charge"); 
+      systematicTree -> makeOutputVariable(m_topFromRes, "truth_top_FromRes"); 
 
 
 
@@ -123,8 +124,7 @@ namespace top {
     m_top_eta.clear(); 
     m_top_phi.clear(); 
     m_top_charge.clear(); 
-
-
+    m_topFromRes.clear(); 
 
     if (!event.m_info -> eventType(xAOD::EventInfo::IS_SIMULATION)){return;}
     if (event.m_info -> isAvailable<float>("GenFiltHT"))
@@ -142,8 +142,8 @@ namespace top {
         std::vector<const xAOD::TruthParticle*> ghost_P = jet -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
         AllParents.insert(AllParents.end(), ghost_P.begin(), ghost_P.end());  
 
-        if ( jet -> pt() < PT_Cut || fabs(jet -> eta()) > ETA_Cut){continue;}
-        m_GhostTruthJetMap.push_back(0); 
+        //if ( jet -> pt() < PT_Cut || fabs(jet -> eta()) > ETA_Cut){continue;}
+        m_GhostTruthJetMap.push_back({0}); 
         m_TruthJets_pt.push_back( jet -> pt() ); 
         m_TruthJets_e.push_back( jet -> e() ); 
         m_TruthJets_eta.push_back( jet -> eta() ); 
@@ -158,6 +158,13 @@ namespace top {
       std::vector<const xAOD::TruthParticle*> TopsPreFSR_ = TopsPreFSR(Out);
       for (const xAOD::TruthParticle* T : TopsPreFSR_)
       {
+        int res = 0; 
+        for (unsigned int i(0); i < T -> nParents(); i++)
+        {
+          if (ParticleID::isBSMZ(T -> parent(i) -> pdgId())){ res = 1; }
+        }
+        m_topFromRes.push_back(res); 
+
         m_topsPreFSR_pt.push_back(T -> pt()); 
         m_topsPreFSR_e.push_back(T -> e()); 
         m_topsPreFSR_eta.push_back(T -> eta()); 
@@ -243,7 +250,7 @@ namespace top {
             }
           }
           
-          if (TMP.size() > 0){ m_GhostTruthJetMap[index] = p; }
+          if (TMP.size() > 0){ m_GhostTruthJetMap[index].push_back(p); }
           index++;
         }
       }
