@@ -12,6 +12,7 @@ const xAOD::TruthParticle* TopsPostFSR(const xAOD::TruthParticle* Particles);
 
 const xAOD::TruthParticle* GetPath(const xAOD::TruthParticle* particle, int k, std::vector<const xAOD::TruthParticle*>* PV, std::vector<int>* PM);
 
+const xAOD::TruthParticle* PreDecay(const xAOD::TruthParticle* particle); 
 
 
 

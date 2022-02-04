@@ -44,6 +44,8 @@ namespace top {
       systematicTree -> makeOutputVariable(m_topPostFSR_children_phi, "topPostFSRchildren_phi"); 
       systematicTree -> makeOutputVariable(m_topPostFSR_children_charge, "topPostFSRchildren_charge"); 
       systematicTree -> makeOutputVariable(m_topPostFSR_children_pdgid, "topPostFSRchildren_pdgid"); 
+      systematicTree -> makeOutputVariable(m_Gtop_index, "Gtop_index"); 
+      systematicTree -> makeOutputVariable(m_GtopFromRes, "Gtop_FromRes"); 
 
       systematicTree -> makeOutputVariable(m_TruthJets_pt, "truthjet_pt"); 
       systematicTree -> makeOutputVariable(m_TruthJets_e, "truthjet_e"); 
@@ -66,8 +68,7 @@ namespace top {
       systematicTree -> makeOutputVariable(m_top_phi, "truth_top_phi"); 
       systematicTree -> makeOutputVariable(m_top_charge, "truth_top_charge"); 
       systematicTree -> makeOutputVariable(m_topFromRes, "truth_top_FromRes"); 
-
-
+      systematicTree -> makeOutputVariable(m_top_index, "truth_top_index"); 
 
     }
     F = file; 
@@ -110,6 +111,7 @@ namespace top {
       
     // Truth jet to Ghost top mapping 
     m_GhostTruthJetMap.clear(); 
+    m_Gtop_index.clear(); 
 
     // Children from m_truth branch 
     m_top_children_pt.clear(); 
@@ -126,6 +128,9 @@ namespace top {
     m_top_phi.clear(); 
     m_top_charge.clear(); 
     m_topFromRes.clear(); 
+    m_GtopFromRes.clear(); 
+
+    m_top_index.clear(); 
 
     if (!event.m_info -> eventType(xAOD::EventInfo::IS_SIMULATION)){return;}
     if (event.m_info -> isAvailable<float>("GenFiltHT"))
@@ -160,11 +165,8 @@ namespace top {
       for (const xAOD::TruthParticle* T : TopsPreFSR_)
       {
         int res = 0; 
-        for (unsigned int i(0); i < T -> nParents(); i++)
-        {
-          if (ParticleID::isBSMZ(T -> parent(i) -> pdgId())){ res = 1; }
-        }
-        m_topFromRes.push_back(res); 
+        if (IsFinalBSMZ(T)){res=1;}
+        m_GtopFromRes.push_back(res); 
 
         m_topsPreFSR_pt.push_back(T -> pt()); 
         m_topsPreFSR_e.push_back(T -> e()); 
@@ -172,7 +174,7 @@ namespace top {
         m_topsPreFSR_phi.push_back(T -> phi()); 
         m_topsPreFSR_charge.push_back(T -> charge()); 
       }
-
+        
       // Find tops before full decay, i.e. they have gone through FSR
       std::vector<const xAOD::TruthParticle*> TopsPostFSR_; 
       for (const xAOD::TruthParticle* T : TopsPreFSR_)
@@ -194,7 +196,7 @@ namespace top {
         std::vector<int> pdgid; 
         for (unsigned int i(0); i < P -> nChildren(); i++)
         {
-          const xAOD::TruthParticle* ch = P -> child(i); 
+          const xAOD::TruthParticle* ch = PreDecay(P -> child(i));
           if (ParticleID::isW(ch -> pdgId()))
           {
             for (unsigned int k(0); k < ch -> nChildren(); k++)
@@ -205,7 +207,9 @@ namespace top {
               phi.push_back(ch -> child(k) -> phi()); 
               charge.push_back(ch -> child(k) -> charge()); 
               pdgid.push_back(ch -> child(k) -> pdgId()); 
+
             }
+
           }
           else 
           {
@@ -217,13 +221,14 @@ namespace top {
             pdgid.push_back(ch -> pdgId()); 
           }
 
-          m_topPostFSR_children_pt.push_back(pt); 
-          m_topPostFSR_children_e.push_back(e); 
-          m_topPostFSR_children_eta.push_back(eta); 
-          m_topPostFSR_children_phi.push_back(phi); 
-          m_topPostFSR_children_charge.push_back(charge); 
-          m_topPostFSR_children_pdgid.push_back(pdgid); 
         }
+
+        m_topPostFSR_children_pt.push_back(pt); 
+        m_topPostFSR_children_e.push_back(e); 
+        m_topPostFSR_children_eta.push_back(eta); 
+        m_topPostFSR_children_phi.push_back(phi); 
+        m_topPostFSR_children_charge.push_back(charge); 
+        m_topPostFSR_children_pdgid.push_back(pdgid); 
       }
       
       // Now match the tops by following the decay chain and match them to truth jets.
@@ -231,6 +236,8 @@ namespace top {
       for (const xAOD::TruthParticle* T : TopsPostFSR_)
       {
         p++; 
+        m_Gtop_index.push_back(p); 
+
         std::vector<const xAOD::TruthParticle*> ParticleVector; 
         std::vector<int> ParticleMap; 
         GetPath(T, 0, &ParticleVector, &ParticleMap); 
@@ -259,19 +266,26 @@ namespace top {
       std::vector<const xAOD::TruthParticle*> ParticleVector; 
       std::vector<int> ParticleMap; 
       const xAOD::TruthParticleContainer* TPC = event.m_truth; 
+      p = 0; 
       for (const xAOD::TruthParticle* T : *TPC)
       {
 
         if (ParticleID::isGEANT(T -> barcode())){break;}
         if (!IsFinalTop(T)){continue;} // Check that the given top decays into quarks etc.
 
+        int res = 0; 
+        if (IsFinalBSMZ(T)){res=1;}
+        m_topFromRes.push_back(res); 
+
         GetPath(T, 0, &ParticleVector, &ParticleMap); 
+        p++; 
 
         m_top_pt.push_back(T -> pt()); 
         m_top_e.push_back(T -> e()); 
         m_top_eta.push_back(T -> eta()); 
         m_top_phi.push_back(T -> phi()); 
         m_top_charge.push_back(T -> charge()); 
+        m_top_index.push_back(p); 
       }
      
       std::vector<float> tmp_pt; 
@@ -314,6 +328,14 @@ namespace top {
         }
         else if (ParticleMap[i] == 0) 
         {
+          tmp_pt.clear(); 
+          tmp_e.clear(); 
+          tmp_eta.clear(); 
+          tmp_phi.clear(); 
+          tmp_charge.clear(); 
+          tmp_pdgid.clear(); 
+
+          
           m_top_children_pt.push_back(tmp_pt); 
           m_top_children_e.push_back(tmp_e); 
           m_top_children_eta.push_back(tmp_eta); 
@@ -321,17 +343,10 @@ namespace top {
           m_top_children_charge.push_back(tmp_charge); 
           m_top_children_pdgid.push_back(tmp_pdgid);  
 
-          tmp_pt.clear(); 
-          tmp_e.clear(); 
-          tmp_eta.clear(); 
-          tmp_phi.clear(); 
-          tmp_charge.clear(); 
-          tmp_pdgid.clear(); 
         }
 
       }
     }
-
     top::EventSaverFlatNtuple::saveEvent(event); 
   }
 

@@ -82,6 +82,17 @@ const xAOD::TruthParticle* TopsPostFSR(const xAOD::TruthParticle* Particles)
   return Particles; 
 }
 
+const xAOD::TruthParticle* PreDecay(const xAOD::TruthParticle* particle)
+{
+  for (unsigned int i(0); i < particle -> nChildren(); i++)
+  {
+    const xAOD::TruthParticle* cand = particle -> child(i); 
+    if (!cand){continue;}
+    if (cand -> pdgId() == particle -> pdgId()){ return PreDecay(cand); }
+  }
+  return particle; 
+}
+
 const xAOD::TruthParticle* GetPath(const xAOD::TruthParticle* particle, int k, std::vector<const xAOD::TruthParticle*>* PV, std::vector<int>* PM)
 {
 
@@ -98,4 +109,7 @@ const xAOD::TruthParticle* GetPath(const xAOD::TruthParticle* particle, int k, s
   
   return particle; 
 }
+
+
+
 

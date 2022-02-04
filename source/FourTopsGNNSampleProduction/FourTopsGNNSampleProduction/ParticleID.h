@@ -32,6 +32,7 @@ class ParticleID
 };
 
 bool IsFinalTop(const xAOD::TruthParticle* particle); 
+bool IsFinalBSMZ(const xAOD::TruthParticle* particle); 
 
 
 #endif 

@@ -26,6 +26,8 @@ namespace top {
       std::vector<float> m_topsPreFSR_eta;
       std::vector<float> m_topsPreFSR_phi;
       std::vector<int> m_topsPreFSR_charge; 
+      std::vector<int> m_Gtop_index; 
+      std::vector<int> m_GtopFromRes; 
 
       // Reconstructed ghost tops post FSR
       std::vector<float> m_topsPostFSR_pt;
@@ -68,6 +70,7 @@ namespace top {
       std::vector<float> m_top_phi; 
       std::vector<int> m_top_charge; 
       std::vector<int> m_topFromRes; 
+      std::vector<int> m_top_index; 
 
 
       ClassDefOverride(top::EventSaver, 0); 

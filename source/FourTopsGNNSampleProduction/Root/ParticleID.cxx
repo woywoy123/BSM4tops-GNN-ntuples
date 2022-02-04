@@ -12,4 +12,14 @@ bool IsFinalTop(const xAOD::TruthParticle* Particle)
   return false;
 }
 
+bool IsFinalBSMZ(const xAOD::TruthParticle* Particle)
+{
+  for (unsigned int i(0); i < Particle -> nParents(); i++)
+  {
+    if (ParticleID::isBSMZ( Particle -> parent(i) -> pdgId())){return true;}
+    else{return IsFinalBSMZ(Particle -> parent(i));}
+  }
+  return false;
+}
+
 
