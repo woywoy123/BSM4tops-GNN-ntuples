@@ -328,14 +328,6 @@ namespace top {
         }
         else if (ParticleMap[i] == 0) 
         {
-          tmp_pt.clear(); 
-          tmp_e.clear(); 
-          tmp_eta.clear(); 
-          tmp_phi.clear(); 
-          tmp_charge.clear(); 
-          tmp_pdgid.clear(); 
-
-          
           m_top_children_pt.push_back(tmp_pt); 
           m_top_children_e.push_back(tmp_e); 
           m_top_children_eta.push_back(tmp_eta); 
@@ -343,6 +335,13 @@ namespace top {
           m_top_children_charge.push_back(tmp_charge); 
           m_top_children_pdgid.push_back(tmp_pdgid);  
 
+
+          tmp_pt.clear(); 
+          tmp_e.clear(); 
+          tmp_eta.clear(); 
+          tmp_phi.clear(); 
+          tmp_charge.clear(); 
+          tmp_pdgid.clear(); 
         }
 
       }
