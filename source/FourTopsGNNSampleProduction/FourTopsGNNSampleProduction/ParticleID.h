@@ -27,8 +27,11 @@ class ParticleID
     static bool isMu(int pdgId){ return abs(pdgId) == 13; }
     static bool isEl(int pdgId){ return abs(pdgId) == 11; }
     static bool isNu(int pdgId){ return abs(pdgId) == 12 || abs(pdgId) == 14 || abs(pdgId) == 16; }
+    static bool isQuark(int pdgId){ return abs(pdgId) < 7 && abs(pdgId) > 0; }
+    static bool isLep(int pdgId){ return abs(pdgId) == 11 || abs(pdgId) == 13 || abs(pdgId) == 15; }
 
     static bool isGEANT(int barcode){ return barcode >= 200000; }
+
 };
 
 bool IsFinalTop(const xAOD::TruthParticle* particle); 

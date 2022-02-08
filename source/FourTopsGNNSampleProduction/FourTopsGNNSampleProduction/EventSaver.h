@@ -71,7 +71,8 @@ namespace top {
       std::vector<int> m_top_charge; 
       std::vector<int> m_topFromRes; 
       std::vector<int> m_top_index; 
-
+      
+      std::vector<int> m_top_debug; 
 
       ClassDefOverride(top::EventSaver, 0); 
   }; 

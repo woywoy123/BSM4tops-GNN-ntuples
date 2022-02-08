@@ -82,13 +82,13 @@ const xAOD::TruthParticle* TopsPostFSR(const xAOD::TruthParticle* Particles)
   return Particles; 
 }
 
-const xAOD::TruthParticle* PreDecay(const xAOD::TruthParticle* particle)
+const xAOD::TruthParticle* AssureWDecay(const xAOD::TruthParticle* particle)
 {
   for (unsigned int i(0); i < particle -> nChildren(); i++)
   {
     const xAOD::TruthParticle* cand = particle -> child(i); 
     if (!cand){continue;}
-    if (cand -> pdgId() == particle -> pdgId()){ return PreDecay(cand); }
+    if (cand -> pdgId() == particle -> pdgId() && ParticleID::isW(cand -> pdgId())){ return AssureWDecay(cand); }
   }
   return particle; 
 }

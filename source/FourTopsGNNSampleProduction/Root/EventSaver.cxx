@@ -70,6 +70,9 @@ namespace top {
       systematicTree -> makeOutputVariable(m_topFromRes, "truth_top_FromRes"); 
       systematicTree -> makeOutputVariable(m_top_index, "truth_top_index"); 
 
+      systematicTree -> makeOutputVariable(m_top_debug, "truth_top_debug"); 
+   
+
     }
     F = file; 
   }
@@ -131,6 +134,8 @@ namespace top {
     m_GtopFromRes.clear(); 
 
     m_top_index.clear(); 
+    m_top_debug.clear(); 
+
 
     if (!event.m_info -> eventType(xAOD::EventInfo::IS_SIMULATION)){return;}
     if (event.m_info -> isAvailable<float>("GenFiltHT"))
@@ -194,9 +199,10 @@ namespace top {
         std::vector<float> phi; 
         std::vector<int> charge; 
         std::vector<int> pdgid; 
+        
         for (unsigned int i(0); i < P -> nChildren(); i++)
         {
-          const xAOD::TruthParticle* ch = PreDecay(P -> child(i));
+          const xAOD::TruthParticle* ch = AssureWDecay(P -> child(i));
           if (ParticleID::isW(ch -> pdgId()))
           {
             for (unsigned int k(0); k < ch -> nChildren(); k++)
@@ -207,12 +213,11 @@ namespace top {
               phi.push_back(ch -> child(k) -> phi()); 
               charge.push_back(ch -> child(k) -> charge()); 
               pdgid.push_back(ch -> child(k) -> pdgId()); 
-
             }
-
           }
-          else 
+          else if ( ParticleID::isNu(ch -> pdgId()) || ParticleID::isQuark( ch -> pdgId()) || ParticleID::isLep( ch -> pdgId()))
           {
+
             pt.push_back(ch -> pt());        
             e.push_back(ch -> e()); 
             eta.push_back(ch -> eta()); 
@@ -246,7 +251,7 @@ namespace top {
         for (const xAOD::Jet* j : *m_truthjets)
         {
           
-          if ( j -> pt() < PT_Cut || fabs(j -> eta()) > ETA_Cut){continue;}
+          //if ( j -> pt() < PT_Cut || fabs(j -> eta()) > ETA_Cut){continue;}
           
           std::vector<const xAOD::TruthParticle*> ghost = j -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
           std::vector<const xAOD::TruthParticle*> TMP; 
@@ -263,8 +268,6 @@ namespace top {
         }
       }
 
-      std::vector<const xAOD::TruthParticle*> ParticleVector; 
-      std::vector<int> ParticleMap; 
       const xAOD::TruthParticleContainer* TPC = event.m_truth; 
       p = 0; 
       for (const xAOD::TruthParticle* T : *TPC)
@@ -276,8 +279,6 @@ namespace top {
         int res = 0; 
         if (IsFinalBSMZ(T)){res=1;}
         m_topFromRes.push_back(res); 
-
-        GetPath(T, 0, &ParticleVector, &ParticleMap); 
         p++; 
 
         m_top_pt.push_back(T -> pt()); 
@@ -286,64 +287,49 @@ namespace top {
         m_top_phi.push_back(T -> phi()); 
         m_top_charge.push_back(T -> charge()); 
         m_top_index.push_back(p); 
-      }
-     
-      std::vector<float> tmp_pt; 
-      std::vector<float> tmp_e; 
-      std::vector<float> tmp_eta; 
-      std::vector<float> tmp_phi; 
-      std::vector<int> tmp_charge; 
-      std::vector<int> tmp_pdgid; 
-      for (unsigned int i(0); i < ParticleVector.size(); i++)
-      {
-
-        if (ParticleMap[i] > 1){continue;}
-        if (ParticleMap[i] != 0)
+        
+        std::vector<float> tmp_pt; 
+        std::vector<float> tmp_e; 
+        std::vector<float> tmp_eta; 
+        std::vector<float> tmp_phi; 
+        std::vector<int> tmp_charge; 
+        std::vector<int> tmp_pdgid; 
+        for (unsigned int k(0); k < T -> nChildren(); k++)
         {
-          if (ParticleID::isW(ParticleVector[i] -> pdgId()))
+          const xAOD::TruthParticle* ch = T -> child(k);
+          if (!ch) continue;
+
+          if (ParticleID::isTop(ch -> pdgId())) { m_top_debug.push_back(1); }
+       
+          if (ParticleID::isW(ch -> pdgId()))
           {
-            for (unsigned int t(0); t < ParticleVector[i] -> nChildren(); t++)
+            for (unsigned int c(0); c < ch -> nChildren(); c++)
             {
-              const xAOD::TruthParticle* chil = ParticleVector[i] -> child(t); 
-              for (unsigned int t_i(0); t_i < chil -> nChildren(); t_i++)
-              {
-                tmp_pt.push_back( chil -> child(t_i) -> pt()); 
-                tmp_e.push_back( chil -> child(t_i) -> e()); 
-                tmp_eta.push_back( chil -> child(t_i) -> eta()); 
-                tmp_phi.push_back( chil -> child(t_i) -> phi()); 
-                tmp_charge.push_back( chil -> child(t_i) -> charge()); 
-                tmp_pdgid.push_back( chil -> child(t_i) -> pdgId()); 
-              }
+              tmp_pt.push_back( ch -> child(c) -> pt()); 
+              tmp_e.push_back( ch -> child(c) -> e()); 
+              tmp_eta.push_back( ch -> child(c) -> eta()); 
+              tmp_phi.push_back( ch -> child(c) -> phi()); 
+              tmp_charge.push_back( ch -> child(c) -> charge());
+              tmp_pdgid.push_back( ch -> child(c) -> pdgId()); 
             }
           }
-          else
+          else if ( ParticleID::isNu(ch -> pdgId()) || ParticleID::isQuark( ch -> pdgId()) || ParticleID::isLep( ch -> pdgId()))
           {
-            tmp_pt.push_back( ParticleVector[i] -> pt()); 
-            tmp_e.push_back( ParticleVector[i] -> e()); 
-            tmp_eta.push_back( ParticleVector[i] -> eta()); 
-            tmp_phi.push_back( ParticleVector[i] -> phi()); 
-            tmp_charge.push_back( ParticleVector[i] -> charge()); 
-            tmp_pdgid.push_back( ParticleVector[i] -> pdgId()); 
+            tmp_pt.push_back( ch -> pt()); 
+            tmp_e.push_back( ch -> e()); 
+            tmp_eta.push_back( ch -> eta()); 
+            tmp_phi.push_back( ch -> phi()); 
+            tmp_charge.push_back( ch -> charge());
+            tmp_pdgid.push_back( ch -> pdgId()); 
           }
         }
-        else if (ParticleMap[i] == 0) 
-        {
-          m_top_children_pt.push_back(tmp_pt); 
-          m_top_children_e.push_back(tmp_e); 
-          m_top_children_eta.push_back(tmp_eta); 
-          m_top_children_phi.push_back(tmp_phi); 
-          m_top_children_charge.push_back(tmp_charge); 
-          m_top_children_pdgid.push_back(tmp_pdgid);  
 
-
-          tmp_pt.clear(); 
-          tmp_e.clear(); 
-          tmp_eta.clear(); 
-          tmp_phi.clear(); 
-          tmp_charge.clear(); 
-          tmp_pdgid.clear(); 
-        }
-
+        m_top_children_pt.push_back(tmp_pt); 
+        m_top_children_e.push_back(tmp_e); 
+        m_top_children_eta.push_back(tmp_eta); 
+        m_top_children_phi.push_back(tmp_phi); 
+        m_top_children_charge.push_back(tmp_charge); 
+        m_top_children_pdgid.push_back(tmp_pdgid);  
       }
     }
     top::EventSaverFlatNtuple::saveEvent(event); 
