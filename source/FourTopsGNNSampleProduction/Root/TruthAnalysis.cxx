@@ -48,6 +48,8 @@ std::vector<const xAOD::TruthParticle*> TopsPreFSR(std::vector<const xAOD::Truth
   std::vector<const xAOD::TruthParticle*> TMP_O; 
   for (const xAOD::TruthParticle* T : Particles)
   {
+    if (!T){continue;}
+    if (ParticleID::isTop(T -> pdgId())){ TMP_T.push_back(T); continue;}
     for (unsigned int i(0); i < T -> nChildren(); i++)
     {
       const xAOD::TruthParticle* cand = T -> child(i); 
@@ -57,18 +59,21 @@ std::vector<const xAOD::TruthParticle*> TopsPreFSR(std::vector<const xAOD::Truth
         std::vector<const xAOD::TruthParticle*> bsmZ = TopsPreFSR({cand}); 
         TMP_T.insert(TMP_T.end(), bsmZ.begin(), bsmZ.end());
       }
-      if (ParticleID::isTop(cand -> pdgId())){ TMP_T.push_back(cand); }
-      else {TMP_O.push_back(cand);}
+      if (ParticleID::isTop(cand -> pdgId())){ TMP_T.push_back(cand); continue;}
+      TMP_O.push_back(cand);
     }
   }
 
   // Make sure they are unique objects 
   std::vector<const xAOD::TruthParticle*> Out_T = UniqueObject(TMP_T);
   std::vector<const xAOD::TruthParticle*> Out_O = UniqueObject(TMP_O); 
-  
-  if (Out_T.size() != 0){ return Out_T; }
-  else if (Out_O.size() != 0){ return TopsPreFSR(Out_O); }
-  else { return Out_O; }
+
+  if (Out_O.size() != 0)
+  {
+    Out_O.insert( Out_O.end(), Out_T.begin(), Out_T.end() ); 
+    return TopsPreFSR(Out_O);
+  }
+  return Out_T;
 }
 
 

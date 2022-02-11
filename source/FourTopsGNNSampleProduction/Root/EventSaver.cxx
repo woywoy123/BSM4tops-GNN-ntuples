@@ -154,7 +154,7 @@ namespace top {
         AllParents.insert(AllParents.end(), ghost_P.begin(), ghost_P.end());  
 
         //if ( jet -> pt() < PT_Cut || fabs(jet -> eta()) > ETA_Cut){continue;}
-        m_GhostTruthJetMap.push_back({}); 
+        m_GhostTruthJetMap.push_back({0}); 
         m_TruthJets_pt.push_back( jet -> pt() ); 
         m_TruthJets_e.push_back( jet -> e() ); 
         m_TruthJets_eta.push_back( jet -> eta() ); 
@@ -163,9 +163,11 @@ namespace top {
       }
       
       // Merge all the ghost particles and get a common parent i.e. go to origin particles
+      std::cout << "______ EVENT ______" << std::endl;
       std::vector<const xAOD::TruthParticle*> Out = MergeParents(AllParents);
 
       // Now go down the decay chain and parents which produce tops
+      std::cout << ">> Mapping ______" << std::endl;
       std::vector<const xAOD::TruthParticle*> TopsPreFSR_ = TopsPreFSR(Out);
       for (const xAOD::TruthParticle* T : TopsPreFSR_)
       {
@@ -179,7 +181,8 @@ namespace top {
         m_topsPreFSR_phi.push_back(T -> phi()); 
         m_topsPreFSR_charge.push_back(T -> charge()); 
       }
-        
+       
+
       // Find tops before full decay, i.e. they have gone through FSR
       std::vector<const xAOD::TruthParticle*> TopsPostFSR_; 
       for (const xAOD::TruthParticle* T : TopsPreFSR_)
@@ -263,13 +266,18 @@ namespace top {
             }
           }
           
-          if (TMP.size() > 0){ m_GhostTruthJetMap[index].push_back(p); }
+          if (TMP.size() > 0)
+          { 
+            if (m_GhostTruthJetMap[index][0] == 0){m_GhostTruthJetMap[index] = {};}
+            m_GhostTruthJetMap[index].push_back(p); 
+          }
           index++;
         }
       }
 
       const xAOD::TruthParticleContainer* TPC = event.m_truth; 
-      p = 0; 
+      p = 0;
+      int y = 0; 
       for (const xAOD::TruthParticle* T : *TPC)
       {
 
@@ -296,7 +304,7 @@ namespace top {
         std::vector<int> tmp_pdgid; 
         for (unsigned int k(0); k < T -> nChildren(); k++)
         {
-          const xAOD::TruthParticle* ch = T -> child(k);
+          const xAOD::TruthParticle* ch = AssureWDecay(T -> child(k));
           if (!ch) continue;
 
           if (ParticleID::isTop(ch -> pdgId())) { m_top_debug.push_back(1); }
@@ -311,6 +319,7 @@ namespace top {
               tmp_phi.push_back( ch -> child(c) -> phi()); 
               tmp_charge.push_back( ch -> child(c) -> charge());
               tmp_pdgid.push_back( ch -> child(c) -> pdgId()); 
+              y++; 
             }
           }
           else if ( ParticleID::isNu(ch -> pdgId()) || ParticleID::isQuark( ch -> pdgId()) || ParticleID::isLep( ch -> pdgId()))
@@ -321,6 +330,7 @@ namespace top {
             tmp_phi.push_back( ch -> phi()); 
             tmp_charge.push_back( ch -> charge());
             tmp_pdgid.push_back( ch -> pdgId()); 
+            y++; 
           }
         }
 
