@@ -163,11 +163,9 @@ namespace top {
       }
       
       // Merge all the ghost particles and get a common parent i.e. go to origin particles
-      std::cout << "______ EVENT ______" << std::endl;
       std::vector<const xAOD::TruthParticle*> Out = MergeParents(AllParents);
 
       // Now go down the decay chain and parents which produce tops
-      std::cout << ">> Mapping ______" << std::endl;
       std::vector<const xAOD::TruthParticle*> TopsPreFSR_ = TopsPreFSR(Out);
       for (const xAOD::TruthParticle* T : TopsPreFSR_)
       {
