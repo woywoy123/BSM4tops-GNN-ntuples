@@ -271,7 +271,59 @@ namespace top {
           }
           index++;
         }
+
+
+        if (p > 4)
+        {
+
+          std::vector<int> tmp_ParticleMap; 
+          std::vector<const xAOD::TruthParticle*> tmp_ParticleVector; 
+
+          std::cout << "------- WARNING!!!! MORE THAN 4 TOPS FOUND! " << p << std::endl;
+          for (const xAOD::TruthParticle* K : TopsPostFSR_)
+          {
+            GetPath(K, 0, &tmp_ParticleVector, &tmp_ParticleMap); 
+            std::cout << "TOP ADDRESS: " << K << " nParents: " << K -> nParents() << std::endl;
+
+            if (K -> nParents() > 0)
+            {
+              std::vector<const xAOD::TruthParticle*> Out = MergeParents({K});
+
+              for (const xAOD::TruthParticle* L : Out)
+              {
+                std::cout << "Final parent of Top: " << L -> pdgId() << " A: " << L << " nParents: " << L -> nParents() << " " << L -> pdgId()  << std::endl;
+              }
+            } 
+          }
+
+          std::cout << "====== DECAY CHAIN =========" << std::endl;
+
+          for (int i(0); i < tmp_ParticleVector.size(); i++)
+          {
+            
+            if (tmp_ParticleMap[i] > 5){continue;}
+            TString ar = ""; 
+
+            for (int k(0); k < tmp_ParticleMap[i]; k++){ar += "-"; }
+            ar += "> "; 
+            
+            if (abs(tmp_ParticleVector[i] -> pdgId()) == 6)
+            {
+              std::cout << " NEW TOP: " << std::endl;
+              std::cout << ar << " P: " << tmp_ParticleVector[i] -> pdgId() << " S: " << tmp_ParticleVector[i] -> status() << " MA: " << tmp_ParticleVector[i] <<  std::endl;
+              continue; 
+            }
+
+            std::cout << ar << " P: " << tmp_ParticleVector[i] -> pdgId() << " S: " << tmp_ParticleVector[i] -> status() << " MA: " << tmp_ParticleVector[i] <<  std::endl;
+          }
+          std::this_thread::sleep_for(std::chrono::milliseconds(100000)); 
+        }
+
       }
+
+
+
+
 
       const xAOD::TruthParticleContainer* TPC = event.m_truth; 
       p = 0;
@@ -340,6 +392,8 @@ namespace top {
         m_top_children_pdgid.push_back(tmp_pdgid);  
       }
     }
+
+    
     top::EventSaverFlatNtuple::saveEvent(event); 
   }
 
