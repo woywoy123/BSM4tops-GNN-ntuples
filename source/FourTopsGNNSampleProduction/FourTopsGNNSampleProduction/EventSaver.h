@@ -78,6 +78,123 @@ namespace top {
       std::vector<std::vector<int>> m_jet_map_Ghost; 
 
       ClassDefOverride(top::EventSaver, 0); 
+      
+      void ClearVector()
+      {
+        m_genFilHT = -99; 
+
+        // Reconstructed ghost tops before FSR
+        m_topsPreFSR_pt.clear();
+        m_topsPreFSR_e.clear();
+        m_topsPreFSR_eta.clear();
+        m_topsPreFSR_phi.clear();
+        m_topsPreFSR_charge.clear(); 
+        m_topsPreFSR_status.clear();
+
+        // Reconstructed ghost tops post FSR
+        m_topsPostFSR_pt.clear();
+        m_topsPostFSR_e.clear();
+        m_topsPostFSR_eta.clear();
+        m_topsPostFSR_phi.clear();
+        m_topsPostFSR_charge.clear(); 
+
+        // Children from Reconstucted gHost tops post FSR
+        m_topPostFSR_children_pt.clear(); 
+        m_topPostFSR_children_e.clear(); 
+        m_topPostFSR_children_eta.clear(); 
+        m_topPostFSR_children_phi.clear(); 
+        m_topPostFSR_children_charge.clear(); 
+        m_topPostFSR_children_pdgid.clear(); 
+
+        // Truth jets
+        m_TruthJets_pt.clear();
+        m_TruthJets_e.clear();
+        m_TruthJets_eta.clear();
+        m_TruthJets_phi.clear();
+        m_TruthJets_pdgid.clear(); 
+          
+        // Truth jet to Ghost top mapping 
+        m_GhostTruthJetMap.clear(); 
+        m_Gtop_index.clear(); 
+
+        // Children from m_truth branch 
+        m_top_children_pt.clear(); 
+        m_top_children_e.clear(); 
+        m_top_children_eta.clear(); 
+        m_top_children_phi.clear(); 
+        m_top_children_charge.clear(); 
+        m_top_children_pdgid.clear(); 
+
+        // tops from m_truth branch 
+        m_top_pt.clear(); 
+        m_top_e.clear(); 
+        m_top_eta.clear(); 
+        m_top_phi.clear(); 
+        m_top_charge.clear(); 
+        m_topFromRes.clear(); 
+        m_GtopFromRes.clear(); 
+
+        m_top_index.clear(); 
+        m_top_debug.clear(); 
+        m_jet_map_top.clear();
+        m_jet_map_Ghost.clear();   
+      }
+
+      void FillBranches()
+      {
+
+        for (auto systematicTree : treeManagers())
+        {
+          systematicTree -> makeOutputVariable(m_topsPreFSR_pt, "topPreFSR_pt"); 
+          systematicTree -> makeOutputVariable(m_topsPreFSR_e, "topPreFSR_e"); 
+          systematicTree -> makeOutputVariable(m_topsPreFSR_eta, "topPreFSR_eta"); 
+          systematicTree -> makeOutputVariable(m_topsPreFSR_phi, "topPreFSR_phi"); 
+          systematicTree -> makeOutputVariable(m_topsPreFSR_charge, "topPreFSR_charge"); 
+          systematicTree -> makeOutputVariable(m_topsPreFSR_status, "topPreFSR_status");
+
+          systematicTree -> makeOutputVariable(m_topsPostFSR_pt, "topPostFSR_pt"); 
+          systematicTree -> makeOutputVariable(m_topsPostFSR_e, "topPostFSR_e"); 
+          systematicTree -> makeOutputVariable(m_topsPostFSR_eta, "topPostFSR_eta"); 
+          systematicTree -> makeOutputVariable(m_topsPostFSR_phi, "topPostFSR_phi"); 
+          systematicTree -> makeOutputVariable(m_topsPostFSR_charge, "topPostFSR_charge"); 
+
+          systematicTree -> makeOutputVariable(m_topPostFSR_children_pt, "topPostFSRchildren_pt"); 
+          systematicTree -> makeOutputVariable(m_topPostFSR_children_e, "topPostFSRchildren_e"); 
+          systematicTree -> makeOutputVariable(m_topPostFSR_children_eta, "topPostFSRchildren_eta"); 
+          systematicTree -> makeOutputVariable(m_topPostFSR_children_phi, "topPostFSRchildren_phi"); 
+          systematicTree -> makeOutputVariable(m_topPostFSR_children_charge, "topPostFSRchildren_charge"); 
+          systematicTree -> makeOutputVariable(m_topPostFSR_children_pdgid, "topPostFSRchildren_pdgid"); 
+          systematicTree -> makeOutputVariable(m_Gtop_index, "Gtop_index"); 
+          systematicTree -> makeOutputVariable(m_GtopFromRes, "Gtop_FromRes"); 
+
+          systematicTree -> makeOutputVariable(m_TruthJets_pt, "truthjet_pt"); 
+          systematicTree -> makeOutputVariable(m_TruthJets_e, "truthjet_e"); 
+          systematicTree -> makeOutputVariable(m_TruthJets_eta, "truthjet_eta"); 
+          systematicTree -> makeOutputVariable(m_TruthJets_phi, "truthjet_phi"); 
+          systematicTree -> makeOutputVariable(m_TruthJets_pdgid, "truthjet_pdgid"); 
+
+          systematicTree -> makeOutputVariable(m_GhostTruthJetMap, "GhostTruthJetMap"); 
+
+          systematicTree -> makeOutputVariable(m_top_children_pt, "truth_top_child_pt"); 
+          systematicTree -> makeOutputVariable(m_top_children_e, "truth_top_child_e"); 
+          systematicTree -> makeOutputVariable(m_top_children_eta, "truth_top_child_eta"); 
+          systematicTree -> makeOutputVariable(m_top_children_phi, "truth_top_child_phi"); 
+          systematicTree -> makeOutputVariable(m_top_children_charge, "truth_top_child_charge"); 
+          systematicTree -> makeOutputVariable(m_top_children_pdgid, "truth_top_child_pdgid"); 
+
+          systematicTree -> makeOutputVariable(m_top_pt, "truth_top_pt"); 
+          systematicTree -> makeOutputVariable(m_top_e, "truth_top_e"); 
+          systematicTree -> makeOutputVariable(m_top_eta, "truth_top_eta"); 
+          systematicTree -> makeOutputVariable(m_top_phi, "truth_top_phi"); 
+          systematicTree -> makeOutputVariable(m_top_charge, "truth_top_charge"); 
+          systematicTree -> makeOutputVariable(m_topFromRes, "truth_top_FromRes"); 
+          systematicTree -> makeOutputVariable(m_top_index, "truth_top_index"); 
+
+          systematicTree -> makeOutputVariable(m_top_debug, "truth_top_debug");
+          systematicTree -> makeOutputVariable(m_jet_map_top, "jet_map_top");
+          systematicTree -> makeOutputVariable(m_jet_map_Ghost, "jet_map_Ghost");  
+        }
+      }
   }; 
 }
 

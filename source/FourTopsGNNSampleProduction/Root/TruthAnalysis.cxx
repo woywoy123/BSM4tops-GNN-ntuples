@@ -4,19 +4,6 @@
 #include <chrono>
 #include <algorithm>
 
-
-Truth_ GetParent(Truth_ particle)
-{
-  //if (ParticleID::isTop(particle -> pdgId())) return particle; 
-  for (unsigned int i(0); i < particle -> nParents(); i++)
-  {
-    Truth_ parent = particle -> parent(i);
-    if (!parent){continue;}
-    return GetParent(parent);
-  }
-  return particle; 
-}
-
 // ====================================================== //
 std::vector<Truth_> MergeParents(std::vector<Truth_> Particles)
 {
@@ -31,17 +18,6 @@ std::vector<Truth_> MergeParents(std::vector<Truth_> Particles)
   }
 
   return Output;
-}
-
-// ====================================================== //
-std::vector<Truth_> UniqueObject(std::vector<Truth_> Particles)
-{
-  std::vector<Truth_> Out;
-  for (Truth_ T : Particles)
-  {
-    if (!(std::find(Out.begin(), Out.end(), T) != Out.end())){ Out.push_back(T); }
-  }
-  return Out; 
 }
 
 // ====================================================== //
@@ -79,6 +55,18 @@ std::vector<Truth_> TopsPreFSR(std::vector<Truth_> Particles)
   return Out_T;
 }
 
+Truth_ GetParent(Truth_ particle)
+{
+  //if (ParticleID::isTop(particle -> pdgId())) return particle; 
+  for (unsigned int i(0); i < particle -> nParents(); i++)
+  {
+    Truth_ parent = particle -> parent(i);
+    if (!parent){continue;}
+    return GetParent(parent);
+  }
+  return particle; 
+}
+
 // ====================================================== //
 Truth_ TopsPostFSR(Truth_ Particles)
 {
@@ -88,18 +76,6 @@ Truth_ TopsPostFSR(Truth_ Particles)
     if (ParticleID::isTop(cand -> pdgId())){ return TopsPostFSR(cand); }
   }
   return Particles; 
-}
-
-// ====================================================== //
-Truth_ AssureWDecay(Truth_ particle)
-{
-  for (unsigned int i(0); i < particle -> nChildren(); i++)
-  {
-    Truth_ cand = particle -> child(i); 
-    if (!cand){continue;}
-    if (cand -> pdgId() == particle -> pdgId() && ParticleID::isW(cand -> pdgId())){ return AssureWDecay(cand); }
-  }
-  return particle; 
 }
 
 // ====================================================== //
@@ -120,6 +96,29 @@ Truth_ GetPath(
   }
   
   return particle; 
+}
+
+// ====================================================== //
+Truth_ AssureWDecay(Truth_ particle)
+{
+  for (unsigned int i(0); i < particle -> nChildren(); i++)
+  {
+    Truth_ cand = particle -> child(i); 
+    if (!cand){continue;}
+    if (cand -> pdgId() == particle -> pdgId() && ParticleID::isW(cand -> pdgId())){ return AssureWDecay(cand); }
+  }
+  return particle; 
+}
+
+// ====================================================== //
+std::vector<Truth_> UniqueObject(std::vector<Truth_> Particles)
+{
+  std::vector<Truth_> Out;
+  for (Truth_ T : Particles)
+  {
+    if (!(std::find(Out.begin(), Out.end(), T) != Out.end())){ Out.push_back(T); }
+  }
+  return Out; 
 }
 
 // ====================================================== //
