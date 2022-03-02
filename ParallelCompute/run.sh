@@ -1,7 +1,7 @@
 #!/bin/bash 
 
-NumberOfCores=12
-FilesPerCore=5
+NumberOfCores=8
+FilesPerCore=1
 SampleTexts="/CERN/FourTopsAnalysis"
 Configs="/CERN/FourTopsAnalysis/configs"
 DIR=$PWD
@@ -131,8 +131,26 @@ do
     cd ../
     t=$(($t+1))
   done 
+
+  cp $DIR/Merger.sh .
   cd ../
   l=$(($l+1))
 done 
+
+
+for i in *
+do
+
+  if [[ "$i" != "SampleIndex_"* ]]
+  then 
+    continue
+  fi
+  echo $i
+  cd $i
+  bash Merger.sh
+  
+  cd ../
+
+done
 
 cd $DIR

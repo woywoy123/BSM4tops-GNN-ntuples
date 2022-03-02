@@ -1,1 +1,1 @@
-/CERN/FourTopsAnalysis/mc16_13TeV.310846.MGPy8EG_4toprestt_auto_m1500.deriv.DAOD_TOPQ1.e7058_s3126_r10724_p3980/DAOD_TOPQ1.21403569._000001.pool.root.1
+/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/run/DAOD_TOPQ1.21403569._000012.pool.root.1

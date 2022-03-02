@@ -1,2 +1,0 @@
-# Regular package(s) built in WorkDir - 
-FourTopsGNNSampleProduction <unknown>

@@ -1,9 +1,0 @@
-[release_metadata]
-release:
-nightly name:master
-project name:WorkDir
-nightly release:78799f7
-date:2022-02-01T1509
-compiler:GNU-8.3.0
-cxxpath:/cvmfs/sft.cern.ch/lcg/releases/gcc/8.3.0-cebb0/x86_64-centos7/bin/g++
-cmake:3.18.3

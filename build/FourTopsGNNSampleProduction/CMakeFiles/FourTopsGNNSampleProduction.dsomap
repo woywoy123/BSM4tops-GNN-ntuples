@@ -1,7 +1,0 @@
-{ decls }
-namespace top {  }
-
-[ libFourTopsGNNSampleProduction.so ]
-# List of selected classes
-class top::EventSaver
-header FourTopsGNNSampleProduction/EventSaver.h
