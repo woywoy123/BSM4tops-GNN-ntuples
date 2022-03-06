@@ -72,8 +72,7 @@ namespace top {
       m_topsPreFSR_status.push_back(T -> status());
       m_GtopFromRes.push_back(res); 
     }
-     
-
+    
     // Find tops before full decay, i.e. before FSR
     std::vector<const xAOD::TruthParticle*> TopsPostFSR_; 
     for (const xAOD::TruthParticle* T : TopsPreFSR_)
@@ -117,9 +116,6 @@ namespace top {
 
     // Now match the tops by following the decay chain and match them to truth jets.
     p = 0; 
-    std::vector<int> AllParticleMap; 
-    std::vector<int> TopMap; 
-    std::vector<const xAOD::TruthParticle*> AllParticleVector; 
     for (const xAOD::TruthParticle* T : TopsPostFSR_)
     {
       p++; 
@@ -129,11 +125,7 @@ namespace top {
       std::vector<int> ParticleMap; 
       GetPath(T, 0, &ParticleVector, &ParticleMap); 
       
-      AllParticleMap.insert(AllParticleMap.end(), ParticleMap.begin(), ParticleMap.end()); 
-      AllParticleVector.insert(AllParticleVector.end(), ParticleVector.begin(), ParticleVector.end());
       std::vector<int> tmp(ParticleVector.size(), p); 
-      TopMap.insert(TopMap.end(), tmp.begin(), tmp.end()); 
-      
       int index = 0; 
       for (const xAOD::Jet* j : *m_truthjets)
       {
@@ -159,20 +151,6 @@ namespace top {
       }
     }
    
-    std::map<const xAOD::Jet*, std::vector<const xAOD::TruthParticle*>> Output_E, Output_PT, Paired;
-    std::map<const xAOD::Jet*, std::vector<float>> Paired_E, Paired_PT, Paired_dR;
-    int o = 0;
-    
-    for (const xAOD::Jet* j_i : event.m_jets)
-    {
-      Paired.insert({j_i, {}});
-      Paired_E.insert({j_i, {}}); 
-      Paired_PT.insert({j_i, {}}); 
-      Paired_dR.insert({j_i, {}}); 
-    }
-
-
-
     p = 0;
     const xAOD::TruthParticleContainer* TPC = event.m_truth; 
     for (const xAOD::TruthParticle* T : *TPC)
@@ -222,16 +200,11 @@ namespace top {
       m_top_children_charge.push_back(tmp_charge); 
       m_top_children_pdgid.push_back(tmp_pdgid);  
     }
-    
 
-    //std::cout << "_____ New Event _____ " << std::endl;
     std::map<int, std::vector<int>> TruthJet_JetMap;
     for (unsigned int k(0); k < event.m_jets.size(); k++)
     {
       std::vector<const xAOD::TruthParticle*> g_J = event.m_jets.at(k) -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-      //std::vector<const xAOD::TrackParticle*> g = j_i -> getAssociatedObjects<xAOD::TrackParticle>("GhostTrack"); 
-      //auto algo = j_i -> getAlgorithmType();
-      //std::cout << ghost.size() << " " << algo << " " << g.size() << std::endl;
       TruthJet_JetMap.insert({k, {}}); 
 
       for (unsigned int l(0); l < m_truthjets -> size(); l++)
@@ -244,163 +217,6 @@ namespace top {
       }
       m_jet_map_Ghost.push_back(TruthJet_JetMap[k]); 
     }
-
-    //for (int i(0); i < TruthJet_JetMap.size(); i++)
-    //{
-    //  std::cout << "NEW JET_____ " << std::endl;
-    //  std::cout << TruthJet_JetMap[i].size() << std::endl;
-    //  
-    //  for (int k : TruthJet_JetMap[i]){ std::cout << "TruthJet Index: " << k << std::endl; }
-    //}
-
-
-
-    //std::this_thread::sleep_for(std::chrono::milliseconds(100000)); 
-
-
-    //// ============================== WARNING!!!!!! =========================================== //
-    //// Careful!!! This particle map was created using ONLY TOPS!!!!!! Might need to resort to using all partons from truthjets
-    //for (unsigned int k(0); k < AllParticleMap.size(); k++)
-    //{
-    //  std::vector<float> je_dr; 
-    //  for (const xAOD::Jet* j_i : event.m_jets)
-    //  {
-    //    const xAOD::TruthParticle* depth_p = AllParticleVector[k]; 
-    //    je_dr.push_back(deltaR(*depth_p, *j_i)); 
-    //  }
-    //
-    //  int v_ind = std::min_element(je_dr.begin(), je_dr.end()) - je_dr.begin(); 
-    //  const xAOD::Jet* je = event.m_jets.at(v_ind);
-    //  
-    //  Paired[je].push_back(AllParticleVector[k]);
-    //  Paired_E[je].push_back(AllParticleVector[k] -> e() / je -> e());
-    //  Paired_PT[je].push_back(AllParticleVector[k] -> pt() / je -> pt());
-    //  Paired_dR[je].push_back(je_dr[v_ind]);
-    //}
-    //NormalizeList(Paired, Paired_E, Paired_dR, &Output_E); 
-    //NormalizeList(Paired, Paired_PT, Paired_dR, &Output_PT); 
-
-    //for (it j = Output_E.begin(); j != Output_E.end(); j++)
-    //{
-    //  m_jet_map_top.push_back({0});
-    //  const xAOD::Jet* J = j -> first; 
-    //  std::vector<const xAOD::TruthParticle*> VE = j -> second; 
-    //  std::vector<const xAOD::TruthParticle*> VPT = Output_PT[J]; 
-    //  std::vector<const xAOD::TruthParticle*> Out_V; 
-
-    //  std::set_intersection(VE.begin(), VE.end(), VPT.begin(), VPT.end(), back_inserter(Out_V));
-    //  
-    //  for (int i(0); i < AllParticleVector.size(); i++)
-    //  {
-    //    const xAOD::TruthParticle* thisParticle = AllParticleVector[i]; 
-    //    int thisIndex = TopMap[i];
-    //    for (const xAOD::TruthParticle* JE : Out_V)
-    //    {
-    //      if ( thisParticle == JE )
-    //      {
-    //        if (m_jet_map_top[o][0] == 0){ m_jet_map_top[o] = {}; }
-    //        m_jet_map_top[o].push_back(thisIndex);
-    //        break;
-    //      }
-    //    }
-    //  }
-    //  o++;
-    //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // ============================== Using Ghost Partons of Truth Jets =========================================== //
-    //std::vector<const xAOD::TruthParticle*> AllParents_Unique;
-    //std::vector<int> AllParents_Map_Unique;
-    //for (int i(0); i < AllParents.size(); i++)
-    //{
-    //  if (!(std::find(AllParents_Unique.begin(), AllParents_Unique.end(), AllParents[i]) != AllParents_Unique.end()))
-    //  {
-    //    AllParents_Unique.push_back(AllParents[i]); 
-    //    AllParents_Map_Unique.push_back(AllParents_Map[i]); 
-    //  }
-    //}
-
-    //Paired.clear();
-    //Paired_E.clear();
-    //Paired_PT.clear();
-    //Paired_dR.clear();
-    //Output_E.clear();
-    //Output_PT.clear();
-    //o = 0;
-
-    //for (const xAOD::Jet* j_i : event.m_jets)
-    //{
-    //  Paired.insert({j_i, {}});
-    //  Paired_E.insert({j_i, {}}); 
-    //  Paired_PT.insert({j_i, {}}); 
-    //  Paired_dR.insert({j_i, {}}); 
-    //}
-    //
-    //for (unsigned int k(0); k < AllParents_Unique.size(); k++)
-    //{
-    //  std::vector<float> je_dr; 
-    //  for (const xAOD::Jet* j_i : event.m_jets)
-    //  {
-    //    const xAOD::TruthParticle* depth_p = AllParents_Unique[k]; 
-    //    je_dr.push_back(deltaR(*depth_p, *j_i)); 
-    //  }
-    //
-    //  int v_ind = std::min_element(je_dr.begin(), je_dr.end()) - je_dr.begin(); 
-    //  const xAOD::Jet* je = event.m_jets.at(v_ind);
-    //  
-    //  Paired[je].push_back(AllParents_Unique[k]);
-    //  Paired_E[je].push_back(AllParents_Unique[k] -> e() / je -> e());
-    //  Paired_PT[je].push_back(AllParents_Unique[k] -> pt() / je -> pt());
-    //  Paired_dR[je].push_back(je_dr[v_ind]);
-    //}
-
-    //NormalizeList(Paired, Paired_E, Paired_dR, &Output_E); 
-    //NormalizeList(Paired, Paired_PT, Paired_dR, &Output_PT); 
-    //
-    //for (it j = Output_E.begin(); j != Output_E.end(); j++)
-    //{
-    //  m_jet_map_Ghost.push_back({0});
-    //  const xAOD::Jet* J = j -> first; 
-    //  std::vector<const xAOD::TruthParticle*> VE = j -> second; 
-    //  std::vector<const xAOD::TruthParticle*> VPT = Output_PT[J]; 
-    //  std::vector<const xAOD::TruthParticle*> Out_V; 
-    //  
-    //  std::set_intersection(VE.begin(), VE.end(), VPT.begin(), VPT.end(), back_inserter(Out_V));
-
-    //  for (int i(0); i < AllParents_Unique.size(); i++)
-    //  {
-    //    const xAOD::TruthParticle* thisParticle = AllParents_Unique[i]; 
-    //    int thisIndex = AllParents_Map_Unique[i];
-    //    for (const xAOD::TruthParticle* JE : Out_V)
-    //    {
-    //      if ( thisParticle == JE )
-    //      {
-    //        if (m_jet_map_Ghost[o][0] == 0){ m_jet_map_Ghost[o] = {}; }
-    //        m_jet_map_Ghost[o].push_back(thisIndex);
-    //        break;
-    //      }
-    //    }
-    //  }
-    //  o++;
-    //}
-    
-
-
-    
     top::EventSaverFlatNtuple::saveEvent(event); 
   }
 

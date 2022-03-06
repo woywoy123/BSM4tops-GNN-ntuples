@@ -18,8 +18,6 @@ Truth_ GetPath(Truth_ particle, int k, std::vector<Truth_>* PV, std::vector<int>
 Truth_ AssureWDecay(Truth_ particle); 
 std::vector<Truth_> UniqueObject(std::vector<Truth_> Particles);
 
-void NormalizeList(std::map<Jet_, std::vector<Truth_>> Input, std::map<Jet_, std::vector<float>> Coeff, std::map<Jet_, std::vector<float>> dR, std::map<Jet_, std::vector<Truth_>>* Output);
-
 
 template <class X>
 void FillVector(
@@ -34,14 +32,5 @@ void FillVector(
   phi -> push_back(T -> phi()); 
   eta -> push_back(T -> eta()); 
 }
-
-template <class Y, class U>
-float deltaR(Y p1, U p2)
-{
-  return std::pow( std::pow(p1 -> eta() - p2 -> eta(), 2) + std::pow(p1 -> phi() - p2 -> phi(), 2), 0.5 );
-}
-
-
-
 
 #endif

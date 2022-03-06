@@ -28,7 +28,7 @@ std::vector<Truth_> TopsPreFSR(std::vector<Truth_> Particles)
   for (const xAOD::TruthParticle* T : Particles)
   {
     if (!T){continue;}
-    if (ParticleID::isTop(T -> pdgId())){ TMP_T.push_back(T); continue;}
+    if (ParticleID::isTop(T -> pdgId()) && T -> nParents() != 0 ){ TMP_T.push_back(T); continue;}
     for (unsigned int i(0); i < T -> nChildren(); i++)
     {
       Truth_ cand = T -> child(i); 
@@ -38,7 +38,7 @@ std::vector<Truth_> TopsPreFSR(std::vector<Truth_> Particles)
         std::vector<Truth_> bsmZ = TopsPreFSR({cand}); 
         TMP_T.insert(TMP_T.end(), bsmZ.begin(), bsmZ.end());
       }
-      if (ParticleID::isTop(cand -> pdgId())){ TMP_T.push_back(cand); continue;}
+      if (ParticleID::isTop(cand -> pdgId()) && cand -> nParents() != 0){ TMP_T.push_back(cand); continue;}
       TMP_O.push_back(cand);
     }
   }
@@ -119,45 +119,6 @@ std::vector<Truth_> UniqueObject(std::vector<Truth_> Particles)
     if (!(std::find(Out.begin(), Out.end(), T) != Out.end())){ Out.push_back(T); }
   }
   return Out; 
-}
-
-// ====================================================== //
-void CleanList(
-    std::vector<Truth_>* Input_T, 
-    std::vector<float>* Input_C, 
-    std::vector<float>* Input_dR)
-{
-  float sum = 0;
-  for (int i(0); i < (*Input_C).size(); i++){sum += (*Input_C)[i];}
-  if (sum <= 1){ return; }
-  
-  int rm_i = std::max_element((*Input_dR).begin(), (*Input_dR).end()) - (*Input_dR).begin(); 
-  (*Input_T).erase((*Input_T).begin() + rm_i); 
-  (*Input_C).erase((*Input_C).begin() + rm_i); 
-  (*Input_dR).erase((*Input_dR).begin() + rm_i); 
-  CleanList(Input_T, Input_C, Input_dR); 
-
-}
-
-// ====================================================== //
-void NormalizeList(
-    std::map<Jet_, std::vector<Truth_>> Input, 
-    std::map<Jet_, std::vector<float>> Coeff, 
-    std::map<Jet_, std::vector<float>> dR, 
-    std::map<Jet_, std::vector<Truth_>>* Output)
-{
-  for (it b = Input.begin(); b != Input.end(); b++)
-  {
-    Jet_ j = b -> first; 
-    std::vector<Truth_> tv = b -> second; 
-    
-    std::vector<float> c = Coeff[j];
-    std::vector<float> dr = dR[j]; 
-    CleanList(&tv, &c, &dr);
-
-    (*Output).insert({j, tv}); 
-
-  }
 }
 
 
