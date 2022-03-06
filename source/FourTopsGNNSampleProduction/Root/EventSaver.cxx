@@ -40,17 +40,11 @@ namespace top {
 
 
     std::vector<const xAOD::TruthParticle*> AllParents;
-    std::vector<int> AllParents_Map;
-    int p = 0; 
     for (const auto &jet : *m_truthjets)
     {
-      p++; 
       std::vector<const xAOD::TruthParticle*> ghost_P = jet -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
       AllParents.insert(AllParents.end(), ghost_P.begin(), ghost_P.end());  
        
-      std::vector<int> tmp(ghost_P.size(), p); 
-      AllParents_Map.insert(AllParents_Map.end(), tmp.begin(), tmp.end()); 
-      
       //if ( jet -> pt() < PT_Cut || fabs(jet -> eta()) > ETA_Cut){continue;}
       FillVector(jet, &m_TruthJets_pt, &m_TruthJets_e, &m_TruthJets_phi, &m_TruthJets_eta); 
       m_GhostTruthJetMap.push_back({0}); 
@@ -116,7 +110,7 @@ namespace top {
     }
 
     // Now match the tops by following the decay chain and match them to truth jets.
-    p = 0; 
+    int p = 0; 
     for (const xAOD::TruthParticle* T : TopsPostFSR_)
     {
       p++; 
