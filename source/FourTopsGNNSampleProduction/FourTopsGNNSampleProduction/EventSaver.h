@@ -73,8 +73,6 @@ namespace top {
       std::vector<int> m_topFromRes; 
       std::vector<int> m_top_index; 
       
-      std::vector<int> m_top_debug; 
-      std::vector<std::vector<int>> m_jet_map_top; 
       std::vector<std::vector<int>> m_jet_map_Ghost; 
 
       ClassDefOverride(top::EventSaver, 0); 
@@ -135,8 +133,6 @@ namespace top {
         m_GtopFromRes.clear(); 
 
         m_top_index.clear(); 
-        m_top_debug.clear(); 
-        m_jet_map_top.clear();
         m_jet_map_Ghost.clear();   
       }
 
@@ -190,8 +186,6 @@ namespace top {
           systematicTree -> makeOutputVariable(m_topFromRes, "truth_top_FromRes"); 
           systematicTree -> makeOutputVariable(m_top_index, "truth_top_index"); 
 
-          systematicTree -> makeOutputVariable(m_top_debug, "truth_top_debug");
-          systematicTree -> makeOutputVariable(m_jet_map_top, "jet_map_top");
           systematicTree -> makeOutputVariable(m_jet_map_Ghost, "jet_map_Ghost");  
         }
       }

@@ -73,6 +73,7 @@ namespace top {
       m_GtopFromRes.push_back(res); 
     }
     
+    
     // Find tops before full decay, i.e. before FSR
     std::vector<const xAOD::TruthParticle*> TopsPostFSR_; 
     for (const xAOD::TruthParticle* T : TopsPreFSR_)
@@ -174,9 +175,6 @@ namespace top {
       {
         const xAOD::TruthParticle* ch = AssureWDecay(T -> child(k));
         if (!ch) continue;
-
-        if (ParticleID::isTop(ch -> pdgId())) { m_top_debug.push_back(1); }
-     
         if (ParticleID::isW(ch -> pdgId()))
         {
           for (unsigned int c(0); c < ch -> nChildren(); c++)

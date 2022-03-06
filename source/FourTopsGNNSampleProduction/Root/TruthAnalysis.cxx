@@ -28,7 +28,7 @@ std::vector<Truth_> TopsPreFSR(std::vector<Truth_> Particles)
   for (const xAOD::TruthParticle* T : Particles)
   {
     if (!T){continue;}
-    if (ParticleID::isTop(T -> pdgId()) && T -> nParents() != 0 ){ TMP_T.push_back(T); continue;}
+    if (ParticleID::isTop(T -> pdgId())){ TMP_T.push_back(T); continue;}
     for (unsigned int i(0); i < T -> nChildren(); i++)
     {
       Truth_ cand = T -> child(i); 
@@ -38,7 +38,7 @@ std::vector<Truth_> TopsPreFSR(std::vector<Truth_> Particles)
         std::vector<Truth_> bsmZ = TopsPreFSR({cand}); 
         TMP_T.insert(TMP_T.end(), bsmZ.begin(), bsmZ.end());
       }
-      if (ParticleID::isTop(cand -> pdgId()) && cand -> nParents() != 0){ TMP_T.push_back(cand); continue;}
+      if (ParticleID::isTop(cand -> pdgId())){ TMP_T.push_back(cand); continue;}
       TMP_O.push_back(cand);
     }
   }
