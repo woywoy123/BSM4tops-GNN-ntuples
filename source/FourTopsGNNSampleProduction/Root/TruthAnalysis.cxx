@@ -121,4 +121,18 @@ std::vector<Truth_> UniqueObject(std::vector<Truth_> Particles)
   return Out; 
 }
 
+std::vector<Truth_> Intersection(std::vector<Truth_> V1, std::vector<Truth_> V2)
+{
+  std::vector<const xAOD::TruthParticle*> TMP; 
+  for (const xAOD::TruthParticle* t_c : V1)
+  {
+    for (const xAOD::TruthParticle* t_p : V2)
+    {
+      if (t_c == t_p){TMP.push_back(t_c); }
+    }
+  }
+  return TMP;
+}
+
+
 

@@ -111,6 +111,7 @@ namespace top {
 
     // Now match the tops by following the decay chain and match them to truth jets.
     int p = 0; 
+    for (int i = 0; i < event.m_jets.size(); i++){ m_jet_map_tops.push_back({0}); }
     for (const xAOD::TruthParticle* T : TopsPostFSR_)
     {
       p++; 
@@ -127,14 +128,31 @@ namespace top {
         //if ( j -> pt() < PT_Cut || fabs(j -> eta()) > ETA_Cut){continue;}
         
         std::vector<const xAOD::TruthParticle*> ghost = j -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-        std::vector<const xAOD::TruthParticle*> Similar; 
+        std::vector<const xAOD::TruthParticle*> Similar = Intersection(ParticleVector, ghost);
         
-        std::set_intersection(ParticleVector.begin(), ParticleVector.end(), ghost.begin(), ghost.end(), back_inserter(Similar)); 
         if (Similar.size() > 0)
         { 
           if (m_GhostTruthJetMap[index][0] == 0){m_GhostTruthJetMap[index] = {};}
           m_GhostTruthJetMap[index].push_back(p); 
         }
+       
+        index++;
+      }
+
+      index = 0; 
+      for (const xAOD::Jet* j : event.m_jets)
+      {
+        //if ( j -> pt() < PT_Cut || fabs(j -> eta()) > ETA_Cut){continue;}
+        
+        std::vector<const xAOD::TruthParticle*> ghost = j -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
+        std::vector<const xAOD::TruthParticle*> Similar = Intersection(ParticleVector, ghost);
+        
+        if (Similar.size() > 0)
+        { 
+          if (m_jet_map_tops[index][0] == 0){m_jet_map_tops[index] = {};}
+          m_jet_map_tops[index].push_back(p); 
+        }
+       
         index++;
       }
     }
@@ -195,9 +213,7 @@ namespace top {
       for (unsigned int l(0); l < m_truthjets -> size(); l++)
       {
         std::vector<const xAOD::TruthParticle*> g_truJ = (*m_truthjets)[l] -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-        
-        std::vector<const xAOD::TruthParticle*> Similar; 
-        std::set_intersection(g_J.begin(), g_J.end(), g_truJ.begin(), g_truJ.end(), back_inserter(Similar));
+        std::vector<const xAOD::TruthParticle*> Similar = Intersection(g_J, g_truJ);
         if (Similar.size() != 0)
         { 
           if (TruthJet_JetMap[k][0] == -1){ TruthJet_JetMap[k] = {}; }

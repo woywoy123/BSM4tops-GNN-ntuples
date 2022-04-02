@@ -18,7 +18,6 @@ Truth_ GetPath(Truth_ particle, int k, std::vector<Truth_>* PV, std::vector<int>
 Truth_ AssureWDecay(Truth_ particle); 
 std::vector<Truth_> UniqueObject(std::vector<Truth_> Particles);
 
-
 template <class X>
 void FillVector(
     X T, 
@@ -32,5 +31,10 @@ void FillVector(
   phi -> push_back(T -> phi()); 
   eta -> push_back(T -> eta()); 
 }
+
+std::vector<Truth_> Intersection(std::vector<Truth_> V1, std::vector<Truth_> V2);
+
+
+
 
 #endif
