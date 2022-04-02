@@ -120,7 +120,6 @@ namespace top {
       std::vector<int> ParticleMap; 
       GetPath(T, 0, &ParticleVector, &ParticleMap); 
       
-      std::vector<int> tmp(ParticleVector.size(), p); 
       int index = 0; 
       for (const xAOD::Jet* j : *m_truthjets)
       {
@@ -128,16 +127,10 @@ namespace top {
         //if ( j -> pt() < PT_Cut || fabs(j -> eta()) > ETA_Cut){continue;}
         
         std::vector<const xAOD::TruthParticle*> ghost = j -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-        std::vector<const xAOD::TruthParticle*> TMP; 
-        for (const xAOD::TruthParticle* t_c : ParticleVector)
-        {
-          for (const xAOD::TruthParticle* g : ghost)
-          {
-            if (t_c == g){ TMP.push_back(t_c); }
-          }
-        }
+        std::vector<const xAOD::TruthParticle*> Similar; 
         
-        if (TMP.size() > 0)
+        std::set_intersection(ParticleVector.begin(), ParticleVector.end(), ghost.begin(), ghost.end(), back_inserter(Similar)); 
+        if (Similar.size() > 0)
         { 
           if (m_GhostTruthJetMap[index][0] == 0){m_GhostTruthJetMap[index] = {};}
           m_GhostTruthJetMap[index].push_back(p); 
@@ -197,7 +190,7 @@ namespace top {
     for (unsigned int k(0); k < event.m_jets.size(); k++)
     {
       std::vector<const xAOD::TruthParticle*> g_J = event.m_jets.at(k) -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-      TruthJet_JetMap.insert({k, {}}); 
+      TruthJet_JetMap.insert({k, {-1}}); 
 
       for (unsigned int l(0); l < m_truthjets -> size(); l++)
       {
@@ -205,7 +198,11 @@ namespace top {
         
         std::vector<const xAOD::TruthParticle*> Similar; 
         std::set_intersection(g_J.begin(), g_J.end(), g_truJ.begin(), g_truJ.end(), back_inserter(Similar));
-        if (Similar.size() != 0){ TruthJet_JetMap[k].push_back(l); }
+        if (Similar.size() != 0)
+        { 
+          if (TruthJet_JetMap[k][0] == -1){ TruthJet_JetMap[k] = {}; }
+          TruthJet_JetMap[k].push_back(l); 
+        }
       }
       m_jet_map_Ghost.push_back(TruthJet_JetMap[k]); 
     }
