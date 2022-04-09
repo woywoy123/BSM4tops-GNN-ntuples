@@ -47,7 +47,7 @@ namespace top {
        
       //if ( jet -> pt() < PT_Cut || fabs(jet -> eta()) > ETA_Cut){continue;}
       FillVector(jet, &m_TruthJets_pt, &m_TruthJets_e, &m_TruthJets_phi, &m_TruthJets_eta); 
-      m_GhostTruthJetMap.push_back({0}); 
+      m_GhostTruthJetMap.push_back({-1}); 
       m_TruthJets_pdgid.push_back(jet -> auxdata<int>("PartonTruthLabelID")); 
     }
     
@@ -70,6 +70,7 @@ namespace top {
     
     // Find tops before full decay, i.e. before FSR
     std::vector<const xAOD::TruthParticle*> TopsPostFSR_; 
+
     for (const xAOD::TruthParticle* T : TopsPreFSR_)
     {
       const xAOD::TruthParticle* P = TopsPostFSR(T);
@@ -111,10 +112,10 @@ namespace top {
 
     // Now match the tops by following the decay chain and match them to truth jets.
     int p = 0; 
-    for (int i = 0; i < event.m_jets.size(); i++){ m_jet_map_tops.push_back({0}); }
+    for (int i = 0; i < event.m_jets.size(); i++){ m_jet_map_tops.push_back({-1}); }
+
     for (const xAOD::TruthParticle* T : TopsPostFSR_)
     {
-      p++; 
       m_Gtop_index.push_back(p); 
 
       std::vector<const xAOD::TruthParticle*> ParticleVector; 
@@ -132,7 +133,7 @@ namespace top {
         
         if (Similar.size() > 0)
         { 
-          if (m_GhostTruthJetMap[index][0] == 0){m_GhostTruthJetMap[index] = {};}
+          if (m_GhostTruthJetMap[index][0] == -1){m_GhostTruthJetMap[index] = {};}
           m_GhostTruthJetMap[index].push_back(p); 
         }
        
@@ -149,26 +150,44 @@ namespace top {
         
         if (Similar.size() > 0)
         { 
-          if (m_jet_map_tops[index][0] == 0){m_jet_map_tops[index] = {};}
+          if (m_jet_map_tops[index][0] == -1){m_jet_map_tops[index] = {};}
           m_jet_map_tops[index].push_back(p); 
         }
        
         index++;
       }
+      p++; 
     }
-   
+  
+    std::map<int, std::vector<int>> TruthJet_JetMap;
+    for (unsigned int k(0); k < event.m_jets.size(); k++)
+    {
+      std::vector<const xAOD::TruthParticle*> g_J = event.m_jets.at(k) -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
+      TruthJet_JetMap.insert({k, {-1}}); 
+
+      for (unsigned int l(0); l < m_truthjets -> size(); l++)
+      {
+        std::vector<const xAOD::TruthParticle*> g_truJ = (*m_truthjets)[l] -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
+        std::vector<const xAOD::TruthParticle*> Similar = Intersection(g_J, g_truJ);
+        if (Similar.size() != 0)
+        { 
+          if (TruthJet_JetMap[k][0] == -1){ TruthJet_JetMap[k] = {}; }
+          TruthJet_JetMap[k].push_back(l); 
+        }
+      }
+      m_jet_map_Ghost.push_back(TruthJet_JetMap[k]); 
+    }
+
     p = 0;
     const xAOD::TruthParticleContainer* TPC = event.m_truth; 
     for (const xAOD::TruthParticle* T : *TPC)
     {
-
       if (ParticleID::isGEANT(T -> barcode())){break;}
       if (!IsFinalTop(T)){continue;} // Check that the given top decays into quarks etc.
 
       int res = 0; 
       if (IsFinalBSMZ(T)){res=1;}
       m_topFromRes.push_back(res); 
-      p++; 
 
       FillVector(T, &m_top_pt, &m_top_e, &m_top_phi, &m_top_eta);
       m_top_charge.push_back(T -> charge()); 
@@ -202,26 +221,13 @@ namespace top {
       m_top_children_phi.push_back(tmp_phi); 
       m_top_children_charge.push_back(tmp_charge); 
       m_top_children_pdgid.push_back(tmp_pdgid);  
+
+      p++; 
     }
 
-    std::map<int, std::vector<int>> TruthJet_JetMap;
-    for (unsigned int k(0); k < event.m_jets.size(); k++)
-    {
-      std::vector<const xAOD::TruthParticle*> g_J = event.m_jets.at(k) -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-      TruthJet_JetMap.insert({k, {-1}}); 
 
-      for (unsigned int l(0); l < m_truthjets -> size(); l++)
-      {
-        std::vector<const xAOD::TruthParticle*> g_truJ = (*m_truthjets)[l] -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-        std::vector<const xAOD::TruthParticle*> Similar = Intersection(g_J, g_truJ);
-        if (Similar.size() != 0)
-        { 
-          if (TruthJet_JetMap[k][0] == -1){ TruthJet_JetMap[k] = {}; }
-          TruthJet_JetMap[k].push_back(l); 
-        }
-      }
-      m_jet_map_Ghost.push_back(TruthJet_JetMap[k]); 
-    }
+
+
     top::EventSaverFlatNtuple::saveEvent(event); 
   }
 

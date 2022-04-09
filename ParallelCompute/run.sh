@@ -1,9 +1,9 @@
 #!/bin/bash 
 
-NumberOfCores=8
+NumberOfCores=7
 FilesPerCore=1
-SampleTexts="/CERN/FourTopsAnalysis"
-Configs="/CERN/FourTopsAnalysis/configs"
+SampleTexts="/CERN/SamplesFromGrid/Resonance/"
+Configs="/CERN/SamplesFromGrid/Resonance/configs"
 DIR=$PWD
 
 ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
@@ -63,33 +63,59 @@ do
   fi
   
   echo $testf >> test.txt
+  Run=false
   for k in ${config[@]}
   do
-    if [[ $k == *"_Test" ]]
+    if [[ $k != *"_Test" ]]
     then 
-      echo "Testing: -> "$k
-      top-xaod $k test.txt >> log.txt
-      
-      testf=""
-      for j in ./*
-      do
-        if [[ $j == *".root" ]]
-        then
-          testf="$k"_nominal.txt
-          rm output*
-          rm test.txt
-          rm log.txt
-          break
-        fi
-      done 
-      if [[ $testf != "" ]]
-      then 
+      continue
+    fi
+
+    cmp=$(cat test.txt)
+
+    if [[ "$cmp" == *"_r9364_"* ]]
+    then 
+      cmp="a"
+    fi
+
+    if [[ "$cmp" == *"_r10201_"* ]]
+    then 
+      cmp="d"
+    fi
+
+    if [[ "$cmp" == *"_r10724_"* ]]
+    then 
+      cmp="e"
+    fi
+
+    if [[ "$k" != *"mc16$cmp"* ]]
+    then 
+      continue
+    fi
+
+    echo "Testing: -> "$k
+    top-xaod $k test.txt >> log.txt
+    
+    testf=""
+    for j in ./*
+    do
+      if [[ $j == *".root" ]]
+      then
+        testf="$k"_nominal.txt
+        rm output*
+        rm test.txt
+        rm log.txt
+        Run=true
         break
       fi
-    fi
-  done
+    done 
 
-  Complete=()
+  done
+  if [[ $Run == false ]]
+  then 
+    exit
+  fi
+
   t=0
   for k in *
   do
@@ -105,38 +131,31 @@ do
     
     if [[ ${#cpu[@]} -ge $NumberOfCores ]]
     then 
-
-      while true 
-      do 
-        alive=()
-        for j in ${cpu[@]}
-        do
-          if ps  -p $j > /dev/null
-          then 
-            echo "Running: $j"
-            alive+=("$j")
-            cpu=$alive
-          fi
-        done
-        
-        if (( ${#alive[@]} == 0 ))
-        then 
-          cpu=()
-          break
-        fi 
-        sleep 40
-        echo "__________" 
+      
+      for pid in ${cpu[*]}
+      do
+        wait $pid
+        echo "Finished $pid"
       done
+      cpu=()
+
     fi
     cd ../
     t=$(($t+1))
   done 
+
+
 
   cp $DIR/Merger.sh .
   cd ../
   l=$(($l+1))
 done 
 
+for pid in ${cpu[*]}
+do
+  wait $pid
+  echo "Finished $pid"
+done
 
 for i in *
 do

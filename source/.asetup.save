@@ -30,26 +30,26 @@ if [ $? -ne 0 ]; then
 fi
 source $ATLAS_LOCAL_ROOT_BASE/packageSetups/localSetup.sh --quiet "cmake 3.18.3"
 if [ -z "${AtlasSetup:+x}" ]; then
-    export AtlasSetup="/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/AtlasSetup/V02-00-33/AtlasSetup"
-    export AtlasSetupVersion="AtlasSetup-02-00-33"
+    export AtlasSetup="/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/AtlasSetup/V02-00-37/AtlasSetup"
+    export AtlasSetupVersion="AtlasSetup-02-00-37"
 fi
-export GAUDI_ROOT="/cvmfs/atlas.cern.ch/repo/sw/software/21.2/GAUDI/21.2.193/InstallArea/x86_64-centos7-gcc8-opt"
+export GAUDI_ROOT="/cvmfs/atlas.cern.ch/repo/sw/software/21.2/GAUDI/21.2.197/InstallArea/x86_64-centos7-gcc8-opt"
 export SITEROOT="/cvmfs/atlas.cern.ch/repo/sw/software/21.2"
 export AtlasBaseDir="/cvmfs/atlas.cern.ch/repo/sw/software/21.2"
 export LCG_RELEASE_BASE="/cvmfs/atlas.cern.ch/repo/sw/software/21.2/sw/lcg/releases"
-export AtlasBuildStamp="2021-11-17T0352"
+export AtlasBuildStamp="2021-12-16T0353"
 export AtlasReleaseType="stable"
 export AtlasBuildBranch="21.2"
 export AtlasProject="AnalysisBase"
 export TDAQ_RELEASE_BASE="/cvmfs/atlas.cern.ch/repo/sw/software/21.2"
 export ATLAS_RELEASE_BASE="/cvmfs/atlas.cern.ch/repo/sw/software/21.2"
 export ATLAS_RELEASEDATA="/cvmfs/atlas.cern.ch/repo/sw/software/21.2/atlas/offline/ReleaseData"
-export AtlasArea="/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBase/21.2.193"
-export AtlasVersion="21.2.193"
-source /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBase/21.2.193/InstallArea/x86_64-centos7-gcc8-opt/setup.sh
+export AtlasArea="/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBase/21.2.197"
+export AtlasVersion="21.2.197"
+source /cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBase/21.2.197/InstallArea/x86_64-centos7-gcc8-opt/setup.sh
 asetup_status=$?
 if [ ${asetup_status} -ne 0 ]; then
-    \echo "AtlasSetup(ERROR): sourcing release setup script (/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBase/21.2.193/InstallArea/x86_64-centos7-gcc8-opt/setup.sh) failed"
+    \echo "AtlasSetup(ERROR): sourcing release setup script (/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBase/21.2.197/InstallArea/x86_64-centos7-gcc8-opt/setup.sh) failed"
 fi
 export TestArea="/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source"
 alias_sys_exe emacs
@@ -77,7 +77,7 @@ unset pythonpath_items usrlibPath usrlibPath64
 #Release Summary as follows:
 #Release base=/cvmfs/atlas.cern.ch/repo/sw/software/21.2
 #Release project=AnalysisBase
-#Release releaseNum=21.2.193
+#Release releaseNum=21.2.197
 #Release asconfig=x86_64-centos7-gcc8-opt
 
 # Execute user-specified epilog
