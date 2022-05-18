@@ -25,7 +25,7 @@ namespace top {
       std::vector<float> m_topsPreFSR_e;
       std::vector<float> m_topsPreFSR_eta;
       std::vector<float> m_topsPreFSR_phi;
-      std::vector<int> m_topsPreFSR_charge; 
+      std::vector<float> m_topsPreFSR_charge; 
       std::vector<int> m_Gtop_index; 
       std::vector<int> m_GtopFromRes; 
       std::vector<int> m_topsPreFSR_status; 
@@ -35,7 +35,7 @@ namespace top {
       std::vector<float> m_topsPostFSR_e;
       std::vector<float> m_topsPostFSR_eta;
       std::vector<float> m_topsPostFSR_phi;
-      std::vector<int> m_topsPostFSR_charge; 
+      std::vector<float> m_topsPostFSR_charge; 
 
 
       // Children from Reconstucted gHost tops post FSR
@@ -43,8 +43,8 @@ namespace top {
       std::vector<std::vector<float>> m_topPostFSR_children_e; 
       std::vector<std::vector<float>> m_topPostFSR_children_eta; 
       std::vector<std::vector<float>> m_topPostFSR_children_phi; 
-      std::vector<std::vector<int>> m_topPostFSR_children_charge; 
-      std::vector<std::vector<int>> m_topPostFSR_children_pdgid; 
+      std::vector<std::vector<float>> m_topPostFSR_children_charge; 
+      std::vector<std::vector<float>> m_topPostFSR_children_pdgid; 
 
       // Truth jets
       std::vector<float> m_TruthJets_pt;
@@ -61,17 +61,17 @@ namespace top {
       std::vector<std::vector<float>> m_top_children_e; 
       std::vector<std::vector<float>> m_top_children_eta; 
       std::vector<std::vector<float>> m_top_children_phi; 
-      std::vector<std::vector<int>> m_top_children_charge; 
-      std::vector<std::vector<int>> m_top_children_pdgid; 
+      std::vector<std::vector<float>> m_top_children_charge; 
+      std::vector<std::vector<float>> m_top_children_pdgid; 
 
       // tops from m_truth branch 
       std::vector<float> m_top_pt; 
       std::vector<float> m_top_e; 
       std::vector<float> m_top_eta; 
       std::vector<float> m_top_phi; 
-      std::vector<int> m_top_charge; 
-      std::vector<int> m_topFromRes; 
-      std::vector<int> m_top_index; 
+      std::vector<float> m_top_charge; 
+      std::vector<float> m_topFromRes; 
+      std::vector<float> m_top_index; 
       
       std::vector<std::vector<int>> m_jet_map_Ghost;
       std::vector<std::vector<int>> m_jet_map_tops;

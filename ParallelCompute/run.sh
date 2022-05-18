@@ -2,8 +2,8 @@
 
 NumberOfCores=7
 FilesPerCore=1
-SampleTexts="/CERN/SamplesFromGrid/Resonance/"
-Configs="/CERN/SamplesFromGrid/Resonance/configs"
+SampleTexts="/CERN/SamplesFromGrid/Background/"
+Configs="/CERN/SamplesFromGrid/Background/configs"
 DIR=$PWD
 
 ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
@@ -64,6 +64,7 @@ do
   
   echo $testf >> test.txt
   Run=false
+  cmp=""
   for k in ${config[@]}
   do
     if [[ $k != *"_Test" ]]
@@ -71,28 +72,31 @@ do
       continue
     fi
 
-    cmp=$(cat test.txt)
+    tmp=$(cat test.txt)
+    echo "$tmp"
 
-    if [[ "$cmp" == *"_r9364_"* ]]
+    if [[ "$tmp" == *"_r9364_"* ]]
     then 
       cmp="a"
     fi
 
-    if [[ "$cmp" == *"_r10201_"* ]]
+    if [[ "$tmp" == *"_r10201_"* ]]
     then 
       cmp="d"
     fi
 
-    if [[ "$cmp" == *"_r10724_"* ]]
+    if [[ "$tmp" == *"_r10724_"* ]]
     then 
       cmp="e"
     fi
+  
+    echo "$cmp"
 
     if [[ "$k" != *"mc16$cmp"* ]]
     then 
       continue
     fi
-
+  
     echo "Testing: -> "$k
     top-xaod $k test.txt >> log.txt
     
@@ -103,14 +107,20 @@ do
       then
         testf="$k"_nominal.txt
         rm output*
-        rm test.txt
         rm log.txt
+        rm test.txt
         Run=true
         break
       fi
     done 
-
+    
+    if [[ $Run == true ]]
+    then 
+      break
+    fi
+  
   done
+
   if [[ $Run == false ]]
   then 
     exit
@@ -143,8 +153,6 @@ do
     cd ../
     t=$(($t+1))
   done 
-
-
 
   cp $DIR/Merger.sh .
   cd ../

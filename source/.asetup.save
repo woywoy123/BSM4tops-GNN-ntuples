@@ -30,8 +30,8 @@ if [ $? -ne 0 ]; then
 fi
 source $ATLAS_LOCAL_ROOT_BASE/packageSetups/localSetup.sh --quiet "cmake 3.18.3"
 if [ -z "${AtlasSetup:+x}" ]; then
-    export AtlasSetup="/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/AtlasSetup/V02-00-37/AtlasSetup"
-    export AtlasSetupVersion="AtlasSetup-02-00-37"
+    export AtlasSetup="/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/AtlasSetup/V02-00-39/AtlasSetup"
+    export AtlasSetupVersion="AtlasSetup-02-00-39"
 fi
 export GAUDI_ROOT="/cvmfs/atlas.cern.ch/repo/sw/software/21.2/GAUDI/21.2.197/InstallArea/x86_64-centos7-gcc8-opt"
 export SITEROOT="/cvmfs/atlas.cern.ch/repo/sw/software/21.2"
@@ -73,6 +73,8 @@ if [ "X$usrlibPath" != "X" ]; then
    fi
 fi
 unset pythonpath_items usrlibPath usrlibPath64
+
+[[ $LD_LIBRARY_PATH =~ $GAUDI_ROOT ]] || unset GAUDI_ROOT
 
 #Release Summary as follows:
 #Release base=/cvmfs/atlas.cern.ch/repo/sw/software/21.2

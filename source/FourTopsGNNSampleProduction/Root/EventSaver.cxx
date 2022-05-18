@@ -66,21 +66,18 @@ namespace top {
       m_topsPreFSR_status.push_back(T -> status());
       m_GtopFromRes.push_back(res); 
     }
-    
-    
+
     // Find tops before full decay, i.e. before FSR
     std::vector<const xAOD::TruthParticle*> TopsPostFSR_; 
-
     for (const xAOD::TruthParticle* T : TopsPreFSR_)
     {
       const xAOD::TruthParticle* P = TopsPostFSR(T);
 
-      FillVector(T, &m_topsPostFSR_pt, &m_topsPostFSR_e, &m_topsPostFSR_phi, &m_topsPostFSR_eta); 
+      FillVector(P, &m_topsPostFSR_pt, &m_topsPostFSR_e, &m_topsPostFSR_phi, &m_topsPostFSR_eta); 
       m_topsPostFSR_charge.push_back(P -> charge()); 
       TopsPostFSR_.push_back(P); 
       
-      std::vector<float> pt, e, eta, phi; 
-      std::vector<int> charge, pdgid; 
+      std::vector<float> pt, e, eta, phi, charge, pdgid; 
       for (unsigned int i(0); i < P -> nChildren(); i++)
       {
         const xAOD::TruthParticle* ch = AssureWDecay(P -> child(i));
@@ -117,7 +114,6 @@ namespace top {
     for (const xAOD::TruthParticle* T : TopsPostFSR_)
     {
       m_Gtop_index.push_back(p); 
-
       std::vector<const xAOD::TruthParticle*> ParticleVector; 
       std::vector<int> ParticleMap; 
       GetPath(T, 0, &ParticleVector, &ParticleMap); 
@@ -136,10 +132,9 @@ namespace top {
           if (m_GhostTruthJetMap[index][0] == -1){m_GhostTruthJetMap[index] = {};}
           m_GhostTruthJetMap[index].push_back(p); 
         }
-       
         index++;
       }
-
+      
       index = 0; 
       for (const xAOD::Jet* j : event.m_jets)
       {
@@ -193,8 +188,7 @@ namespace top {
       m_top_charge.push_back(T -> charge()); 
       m_top_index.push_back(p); 
       
-      std::vector<float> tmp_pt, tmp_e, tmp_eta, tmp_phi; 
-      std::vector<int> tmp_charge, tmp_pdgid; 
+      std::vector<float> tmp_pt, tmp_e, tmp_eta, tmp_phi, tmp_charge, tmp_pdgid; 
       for (unsigned int k(0); k < T -> nChildren(); k++)
       {
         const xAOD::TruthParticle* ch = AssureWDecay(T -> child(k));
@@ -224,10 +218,6 @@ namespace top {
 
       p++; 
     }
-
-
-
-
     top::EventSaverFlatNtuple::saveEvent(event); 
   }
 
