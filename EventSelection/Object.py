@@ -5,7 +5,7 @@ class Electron(object):
 		self.IDLoose = "MediumLH"
 		self.Isolation = "FCTight"
 		self.IsolationLoose = None
-		#self.UseChargeIDSelection = False
+		self.ChargeIDSelection = False
 		self.Pt = 28000
 		self.Triggers = ["2015@e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose", 
 				 "2016@e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0", 
@@ -197,9 +197,11 @@ class ConfigContainer(object):
 		for i in t:
 			self.Add(ELMU, i, True)
 		self._d("")
-		t = ["Isolation", "IsolationLoose", "UseChargeIDSelection"]
+		t = ["Isolation", "IsolationLoose"]
 		for i in t:
 			self.Add(ELMU, i, True)
+
+		self.Add(ELMU, "ChargeIDSelection", False, "UseElectron")
 		self._d("\n# -- PT")
 		ELMU += [self.__Dic["Jet"]]
 		self.Add(ELMU, "Pt", True)	
@@ -257,8 +259,6 @@ class ConfigContainer(object):
 			UniqueBlocks.update(i.Compile())
 			Chain.update(i.Chain())
 	
-		import time 
-		
 		def DependChain(inpt, din):
 			tmp = {}
 			for i in inpt:
@@ -280,7 +280,6 @@ class ConfigContainer(object):
 		f = open(self.Filename, "w")
 		f.write("".join(self.__Collector))
 		f.close()
-			
 	
 	def _d(self, inp):
 		self.__Collector.append(inp + "\n")	
@@ -288,7 +287,7 @@ class ConfigContainer(object):
 	def Add(self, obj, var, Own = False, Title = None):
 		if isinstance(obj, list):
 			for i in obj:
-				self.Add(i, var, Own)
+				self.Add(i, var, Own, Title)
 			return 
 		if var not in obj.__dict__:
 			return 
@@ -327,7 +326,7 @@ class SubBlock(object):
 		self.GRL = -1
 		self.GoodCalo = -1
 		self.PriVTX = -1
-		self.RecoLevel = -1
+		self.Reco_Level = -1
 		self.GTrigDec = -1
 		self.GTrigMatch = -1
 

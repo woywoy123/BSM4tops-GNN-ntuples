@@ -11,10 +11,10 @@ source $AtlasSetup/scripts/sys_exe-alias.sh ''
 if [ -n "${MAKEFLAGS:+x}" ]; then
     asetup_flags=`echo ${MAKEFLAGS} | \grep ' -l'`
     if [ -z "${asetup_flags}" ]; then
-        export MAKEFLAGS="${MAKEFLAGS} -l8"
+        export MAKEFLAGS="${MAKEFLAGS} -l12"
     fi
 else
-    export MAKEFLAGS="-j8 -l8"
+    export MAKEFLAGS="-j12 -l12"
 fi
 source /cvmfs/sft.cern.ch/lcg/releases/gcc/8.3.0-cebb0/x86_64-centos7/setup.sh
 export CC=`\env which gcc 2>/dev/null`
@@ -30,8 +30,8 @@ if [ $? -ne 0 ]; then
 fi
 source $ATLAS_LOCAL_ROOT_BASE/packageSetups/localSetup.sh --quiet "cmake 3.18.3"
 if [ -z "${AtlasSetup:+x}" ]; then
-    export AtlasSetup="/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/AtlasSetup/V02-00-39/AtlasSetup"
-    export AtlasSetupVersion="AtlasSetup-02-00-39"
+    export AtlasSetup="/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/AtlasSetup/V02-00-44/AtlasSetup"
+    export AtlasSetupVersion="AtlasSetup-02-00-44"
 fi
 export GAUDI_ROOT="/cvmfs/atlas.cern.ch/repo/sw/software/21.2/GAUDI/21.2.197/InstallArea/x86_64-centos7-gcc8-opt"
 export SITEROOT="/cvmfs/atlas.cern.ch/repo/sw/software/21.2"
@@ -51,8 +51,7 @@ asetup_status=$?
 if [ ${asetup_status} -ne 0 ]; then
     \echo "AtlasSetup(ERROR): sourcing release setup script (/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBase/21.2.197/InstallArea/x86_64-centos7-gcc8-opt/setup.sh) failed"
 fi
-export TestArea="/home/tnom6927/AnalysisFramework/FourTopsGNNSampleProduction/FourTopsGNNSampleProduction/source"
-alias_sys_exe emacs
+export TestArea="/suphys/tnom6927/bsm4tops-gnn-ntuples/source"
 echo $LD_LIBRARY_PATH | egrep "LCG_[^/:]*/curl/" >/dev/null
 if [ $? -eq 0 ]; then
     alias_sys_exe_envU git

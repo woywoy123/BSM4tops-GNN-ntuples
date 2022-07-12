@@ -6,7 +6,7 @@ def CurrentAnalysisSelection(config):
 	Basic.GRL = None
 	Basic.GoodCalo = None
 	Basic.PriVTX = None
-	Basic.RecoLevel = None
+	Basic.Reco_Level = None
 	
 	# More than two jets with WP 77 	
 	Nbtag_DL1 = SubBlock("Nbtag_DL1")
@@ -68,43 +68,39 @@ def CurrentAnalysisSelection(config):
 
 
 	# Make it into a selection for the electron channel 
-	el_j_dl1 = SubBlock("BSM_ejets_DL1")
-	el_j_dl1.ImportSub([BSM_ejets_DL1, RCJ])
 	el_j_dl1.Save = None
 
 	el_j_dl1r = SubBlock("BSM_ejets_DL1r")
-	el_j_dl1r.ImportSub([BSM_ejets_DL1r, RCJ])
+	el_j_dl1r.ImportSub([BSM_ejets_DL1r])
 	el_j_dl1r.Save = None
 
 	
 	# Make it into a selection for the MUON channel 
 	mu_j_dl1 = SubBlock("BSM_mujets_DL1_RCJ")
-	mu_j_dl1.ImportSub([BSM_mujets_DL1, RCJ])
+	mu_j_dl1.ImportSub([BSM_mujets_DL1, RC])
 	mu_j_dl1.Save = None
 
 	mu_j_dl1r = SubBlock("BSM_mujets_DL1r_RCJ")
-	mu_j_dl1r.ImportSub([BSM_mujets_DL1r, RCJ])
+	mu_j_dl1r.ImportSub([BSM_mujets_DL1r, RC])
 	mu_j_dl1r.Save = None
 
 	config.Selection = [el_j_dl1, el_j_dl1r,
 			    mu_j_dl1, mu_j_dl1r]
 
-
-
-
-
-
 def CurrentAnalysis(config):	
 	config.Default_Event.PackageName = "libFourTopsGNNSampleProduction"
 	config.Default_Event.Format = "top::EventSaver"
+	config.UseRCJetSubstructure = -1
+	config.RCJetPt = -1
+	config.UseRCJets = -1
 	config.Default_Truth.TopPartonHistory = False
 	config.Default_Truth.BlockInfo = False
 	config.Default_Truth.PDFInfo = False
 	config.Default_Truth.TopParticleLevel = False
 	config.Default_Truth.MCGeneratorWeights = "Nominal"
 	CurrentAnalysisSelection(config)	
-if __name__ == "__main__":
 
+if __name__ == "__main__":
 	for j in ["a", "d", "e"]:	
 		for i in [-1, 100]:
 			config = ConfigContainer()
