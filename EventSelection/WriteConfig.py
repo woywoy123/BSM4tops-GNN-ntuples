@@ -69,21 +69,21 @@ def CurrentAnalysisSelection(config):
 
 	# Make it into a selection for the electron channel 
 	el_j_dl1 = SubBlock("BSM_eljets_DL1_RCJ")
-	el_j_dl1.ImportSub([BSM_ejets_DL1, RCJ])
+	el_j_dl1.ImportSub([BSM_ejets_DL1])
 	el_j_dl1.Save = None
 
 	el_j_dl1r = SubBlock("BSM_ejets_DL1r")
-	el_j_dl1r.ImportSub([BSM_ejets_DL1r, RCJ])
+	el_j_dl1r.ImportSub([BSM_ejets_DL1r])
 	el_j_dl1r.Save = None
 
 	
 	# Make it into a selection for the MUON channel 
 	mu_j_dl1 = SubBlock("BSM_mujets_DL1_RCJ")
-	mu_j_dl1.ImportSub([BSM_mujets_DL1, RCJ])
+	mu_j_dl1.ImportSub([BSM_mujets_DL1])
 	mu_j_dl1.Save = None
 
 	mu_j_dl1r = SubBlock("BSM_mujets_DL1r_RCJ")
-	mu_j_dl1r.ImportSub([BSM_mujets_DL1r, RCJ])
+	mu_j_dl1r.ImportSub([BSM_mujets_DL1r])
 	mu_j_dl1r.Save = None
 
 	config.Selection = [el_j_dl1, el_j_dl1r,
