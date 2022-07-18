@@ -1,6 +1,7 @@
 import shutil 
 import os
 import glob
+import json 
 
 def ReadText(f):
     x = open(f, "r")
@@ -25,10 +26,9 @@ def DumpConfig(f, SRCDir, OutDir, config, runner = False):
     run="run.txt"
     if runner == True:
         run="runRucio.txt"
-    script = [
-               "ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase",
+    script = [ "#!/bin/bash",
+               "export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase",
                "source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh",
-               "setupATLAS",
                "cd " + SRCDir+ "/source/", 
                "asetup --restore", 
                "cd " + SRCDir + "/build", 
@@ -39,25 +39,26 @@ def DumpConfig(f, SRCDir, OutDir, config, runner = False):
     ]
 
     if runner == True:
-        script.append("rm $(cat " + run + ") && " + run)
+        script.append("rm ./*.pool.root.1")
     Write(script, f)
 
 
 def DumpRucio(f, SMPL):
     rucio = [
-               "ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase",
+               "#!/bin/bash",
+               "cd " + "/".join(f.split("/")[:-1]), 
+               "export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase",
                "source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh",
-               "setupATLAS",
+               "export RUCIO_ACCOUNT=tnommens", 
                "lsetup rucio", 
                "rucio get --no-subdir mc16_13TeV:" + SMPL,
             ]
     Write(rucio, f)
-               
 
-
-ANA="/CERN/SamplesFromGrid/Downloading"
-PROC="/CERN/SamplesFromGrid/Processed"
-INPT = "/home/tnom6927/bsm4tops-gnn-ntuples/"
+r = "/nfs/dust/atlas/user/woywoy12/AnalysisTop/bsm4tops-gnn-ntuples/"
+ANA= r + "MultiProcessing/Sorted"
+PROC= r + "MultiProcessing/Sorted"
+INPT = r
 OUPT = INPT + "MultiProcessing/Output/"
 
 mc = {}
@@ -65,27 +66,20 @@ mc["r9364"] = INPT + "/EventSelection/SingleLeptonJet_MC_a.txt"
 mc["r10201"] = INPT + "/EventSelection/SingleLeptonJet_MC_d.txt"
 mc["r10724"] = INPT + "/EventSelection/SingleLeptonJet_MC_e.txt"
 
+op = open("FileNames.json", "r")
+F = json.load(op)
+
 smpls = {}
 run = {}
 mc_run = {}
-for i in ReadDir(ANA):
-    for j in ReadDir(i):
+for i in F:
+    for j in F[i]:
         smpls[j] = "/".join(j.split("/")[:-1])
         run[j] = True
-        mc_run[j] = mc[[k for k in j.split("_") if k in mc][0]]
-
-for i in ReadDir(PROC):
-    for j in ReadDir(i):
-        if "root.tmp" in [k for k in ReadDir(j) if ".root" in k][0]:
-            print("REMOVING: ", j)
-            shutil.rmtree(j)
-            continue
-        if j + ".pool.root.1" not in run:
-            run[j + ".pool.root.1"] = False
-            smpls[j + ".pool.root.1"] = ""
-            mc_run[j + ".pool.root.1"] = mc[[k for k in j.split("_") if k in mc][0]]
+        mc_run[j] = mc[[k for k in i.split("_") if k in mc][0]]
 
 for i in run:
+    print(i)
     if run[i] == False:
         continue
     o = OUPT + "/" + i.split("/")[-1].replace(".pool.root.1", "")
@@ -98,7 +92,4 @@ for i in run:
     DumpRucio(o + "/Rucio.sh", i.split("/")[-1]) 
     DumpConfig(o + "/OutRucio.sh", INPT, o, mc_run[i], True)
     Write(["./" + i.split("/")[-1] + ","], o + "/runRucio.txt")
-
-
-
-
+    exit()
