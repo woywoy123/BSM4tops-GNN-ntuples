@@ -37,187 +37,127 @@ namespace top {
     const xAOD::JetContainer* m_truthjets{nullptr}; 
     if (!evtStore() -> retrieve(m_truthjets, "AntiKt4TruthWZJets").isSuccess()){return;}
     if (!m_truthjets){return;}
-
-
-    std::vector<const xAOD::TruthParticle*> AllParents;
-    for (const auto &jet : *m_truthjets)
-    {
-      std::vector<const xAOD::TruthParticle*> ghost_P = jet -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-      AllParents.insert(AllParents.end(), ghost_P.begin(), ghost_P.end());  
-       
-      //if ( jet -> pt() < PT_Cut || fabs(jet -> eta()) > ETA_Cut){continue;}
-      FillVector(jet, &m_TruthJets_pt, &m_TruthJets_e, &m_TruthJets_phi, &m_TruthJets_eta); 
-      m_GhostTruthJetMap.push_back({-1}); 
-      m_TruthJets_pdgid.push_back(jet -> auxdata<int>("PartonTruthLabelID")); 
-    }
-    
-    // Merge all the ghost particles and get a common parent i.e. go to origin particles
-    std::vector<const xAOD::TruthParticle*> Out = MergeParents(AllParents);
-
-    // Now go down the decay chain and parents which produce tops
-    std::vector<const xAOD::TruthParticle*> TopsPreFSR_ = TopsPreFSR(Out);
-    for (const xAOD::TruthParticle* T : TopsPreFSR_)
-    {
-      int res = 0; 
-      if (IsFinalBSMZ(T)){res=1;}
-      FillVector(T, &m_topsPreFSR_pt, &m_topsPreFSR_e, &m_topsPreFSR_phi, &m_topsPreFSR_eta); 
-
-      m_topsPreFSR_charge.push_back(T -> charge()); 
-      m_topsPreFSR_status.push_back(T -> status());
-      m_GtopFromRes.push_back(res); 
-    }
-
-    // Find tops before full decay, i.e. before FSR
-    std::vector<const xAOD::TruthParticle*> TopsPostFSR_; 
-    for (const xAOD::TruthParticle* T : TopsPreFSR_)
-    {
-      const xAOD::TruthParticle* P = TopsPostFSR(T);
-
-      FillVector(P, &m_topsPostFSR_pt, &m_topsPostFSR_e, &m_topsPostFSR_phi, &m_topsPostFSR_eta); 
-      m_topsPostFSR_charge.push_back(P -> charge()); 
-      TopsPostFSR_.push_back(P); 
-      
-      std::vector<float> pt, e, eta, phi, charge, pdgid; 
-      for (unsigned int i(0); i < P -> nChildren(); i++)
-      {
-        const xAOD::TruthParticle* ch = AssureWDecay(P -> child(i));
-        if (ParticleID::isW(ch -> pdgId()))
-        {
-          for (unsigned int k(0); k < ch -> nChildren(); k++)
-          {
-            FillVector(ch -> child(k), &pt, &e, &phi, &eta);
-            charge.push_back(ch -> child(k) -> charge()); 
-            pdgid.push_back(ch -> child(k) -> pdgId()); 
-          }
-        }
-        else if ( ParticleID::isNu(ch -> pdgId()) || ParticleID::isQuark( ch -> pdgId()) || ParticleID::isLep( ch -> pdgId()))
-        {
-          FillVector(ch, &pt, &e, &phi, &eta);
-          charge.push_back(ch -> charge()); 
-          pdgid.push_back(ch -> pdgId()); 
-        }
-
-      }
-
-      m_topPostFSR_children_pt.push_back(pt); 
-      m_topPostFSR_children_e.push_back(e); 
-      m_topPostFSR_children_eta.push_back(eta); 
-      m_topPostFSR_children_phi.push_back(phi); 
-      m_topPostFSR_children_charge.push_back(charge); 
-      m_topPostFSR_children_pdgid.push_back(pdgid); 
-    }
-
-    // Now match the tops by following the decay chain and match them to truth jets.
-    int p = 0; 
-    for (int i = 0; i < event.m_jets.size(); i++){ m_jet_map_tops.push_back({-1}); }
-
-    for (const xAOD::TruthParticle* T : TopsPostFSR_)
-    {
-      m_Gtop_index.push_back(p); 
-      std::vector<const xAOD::TruthParticle*> ParticleVector; 
-      std::vector<int> ParticleMap; 
-      GetPath(T, 0, &ParticleVector, &ParticleMap); 
-      
-      int index = 0; 
-      for (const xAOD::Jet* j : *m_truthjets)
-      {
-        
-        //if ( j -> pt() < PT_Cut || fabs(j -> eta()) > ETA_Cut){continue;}
-        
-        std::vector<const xAOD::TruthParticle*> ghost = j -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-        std::vector<const xAOD::TruthParticle*> Similar = Intersection(ParticleVector, ghost);
-        
-        if (Similar.size() > 0)
-        { 
-          if (m_GhostTruthJetMap[index][0] == -1){m_GhostTruthJetMap[index] = {};}
-          m_GhostTruthJetMap[index].push_back(p); 
-        }
-        index++;
-      }
-      
-      index = 0; 
-      for (const xAOD::Jet* j : event.m_jets)
-      {
-        //if ( j -> pt() < PT_Cut || fabs(j -> eta()) > ETA_Cut){continue;}
-        
-        std::vector<const xAOD::TruthParticle*> ghost = j -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-        std::vector<const xAOD::TruthParticle*> Similar = Intersection(ParticleVector, ghost);
-        
-        if (Similar.size() > 0)
-        { 
-          if (m_jet_map_tops[index][0] == -1){m_jet_map_tops[index] = {};}
-          m_jet_map_tops[index].push_back(p); 
-        }
-       
-        index++;
-      }
-      p++; 
-    }
   
-    std::map<int, std::vector<int>> TruthJet_JetMap;
-    for (unsigned int k(0); k < event.m_jets.size(); k++)
-    {
-      std::vector<const xAOD::TruthParticle*> g_J = event.m_jets.at(k) -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-      TruthJet_JetMap.insert({k, {-1}}); 
-
-      for (unsigned int l(0); l < m_truthjets -> size(); l++)
-      {
-        std::vector<const xAOD::TruthParticle*> g_truJ = (*m_truthjets)[l] -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons"); 
-        std::vector<const xAOD::TruthParticle*> Similar = Intersection(g_J, g_truJ);
-        if (Similar.size() != 0)
-        { 
-          if (TruthJet_JetMap[k][0] == -1){ TruthJet_JetMap[k] = {}; }
-          TruthJet_JetMap[k].push_back(l); 
-        }
-      }
-      m_jet_map_Ghost.push_back(TruthJet_JetMap[k]); 
-    }
-
-    p = 0;
+    // Collect for each top the decay chain and store in a flat vector - Also match each child to a specific jet/truthjet
+    int p = 0; 
     const xAOD::TruthParticleContainer* TPC = event.m_truth; 
+    std::vector<const xAOD::TruthParticle*> Tops_; 
     for (const xAOD::TruthParticle* T : *TPC)
     {
       if (ParticleID::isGEANT(T -> barcode())){break;}
       if (!IsFinalTop(T)){continue;} // Check that the given top decays into quarks etc.
-
+     
       int res = 0; 
       if (IsFinalBSMZ(T)){res=1;}
-      m_topFromRes.push_back(res); 
+      FillVector(T, &m_top_pt, &m_top_e, &m_top_phi, &m_top_eta, &m_top_charge, &m_top_pdgid);
+      m_top_FromRes.push_back(res); 
+      m_top_index.push_back(p);
 
-      FillVector(T, &m_top_pt, &m_top_e, &m_top_phi, &m_top_eta);
-      m_top_charge.push_back(T -> charge()); 
-      m_top_index.push_back(p); 
-      
-      std::vector<float> tmp_pt, tmp_e, tmp_eta, tmp_phi, tmp_charge, tmp_pdgid; 
-      for (unsigned int k(0); k < T -> nChildren(); k++)
+      std::vector<const xAOD::TruthParticle*> Particle_Vector; 
+      std::vector<int> Particle_DecayIndex;
+      GetPath(T, 0, &Particle_Vector, &Particle_DecayIndex);
+
+      // Record all the children decay chain
+      for (unsigned int i=0; i<Particle_DecayIndex.size(); i++)
       {
-        const xAOD::TruthParticle* ch = AssureWDecay(T -> child(k));
-        if (!ch) continue;
-        if (ParticleID::isW(ch -> pdgId()))
-        {
-          for (unsigned int c(0); c < ch -> nChildren(); c++)
-          {
-            FillVector(ch -> child(c), &tmp_pt, &tmp_e, &tmp_phi, &tmp_eta);
-            tmp_charge.push_back( ch -> child(c) -> charge());
-            tmp_pdgid.push_back( ch -> child(c) -> pdgId()); 
-          }
-        }
-        else if ( ParticleID::isNu(ch -> pdgId()) || ParticleID::isQuark( ch -> pdgId()) || ParticleID::isLep( ch -> pdgId()))
-        {
-          FillVector(ch, &tmp_pt, &tmp_e, &tmp_phi, &tmp_eta);
-          tmp_charge.push_back( ch -> charge());
-          tmp_pdgid.push_back( ch -> pdgId()); 
-        }
-      }
-      m_top_children_pt.push_back(tmp_pt); 
-      m_top_children_e.push_back(tmp_e); 
-      m_top_children_eta.push_back(tmp_eta); 
-      m_top_children_phi.push_back(tmp_phi); 
-      m_top_children_charge.push_back(tmp_charge); 
-      m_top_children_pdgid.push_back(tmp_pdgid);  
+        const xAOD::TruthParticle* C = Particle_Vector[i];
+        int C_i = Particle_DecayIndex[i];
 
+        m_top_children_index.push_back(C_i);
+        m_top_children_TopIndex.push_back(p);
+        FillVector(C, &m_top_children_pt, 
+            &m_top_children_e, &m_top_children_phi, 
+            &m_top_children_eta, &m_top_children_charge, 
+            &m_top_children_pdgid);
+        
+        std::vector<int> tmp_JetIndex; 
+        for (unsigned int j(0); j < event.m_jets.size(); j++)
+        {
+          std::vector<const xAOD::TruthParticle*> g_J = event.m_jets.at(j) -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons");
+          std::vector<const xAOD::TruthParticle*> F = Intersection({C}, g_J); 
+          if ( F.size() != 0 ){ tmp_JetIndex.push_back(j); }
+        }
+        if (tmp_JetIndex.size() == 0) {tmp_JetIndex = {-1};}
+        m_top_children_JetIndex.push_back(tmp_JetIndex);
+
+        std::vector<int> tmp_TruthJetIndex; 
+        for (unsigned int j(0); j < m_truthjets -> size(); j++)
+        {
+          std::vector<const xAOD::TruthParticle*> g_J = (*m_truthjets)[j] -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons");
+          std::vector<const xAOD::TruthParticle*> F = Intersection({C}, g_J); 
+          if ( F.size() != 0 ){ tmp_TruthJetIndex.push_back(j); }
+        }
+        if (tmp_TruthJetIndex.size() == 0) {tmp_TruthJetIndex = {-1};}
+        m_top_children_TruthJetIndex.push_back(tmp_TruthJetIndex);
+      }
       p++; 
     }
+    
+    // Record the jet constituents and record any top contributions
+    for (unsigned int j(0); j < event.m_jets.size(); j++)
+    {
+      std::vector<const xAOD::TruthParticle*> g_J = event.m_jets.at(j) -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons");
+      
+      std::vector<int> Tmp_Index; 
+      for (unsigned int i(0); i < Tops_.size(); i++)
+      {
+        const xAOD::TruthParticle* T = Tops_[i]; 
+        std::vector<const xAOD::TruthParticle*> t_map; 
+        std::vector<int> t_index; 
+
+        GetPath(T, 0, &t_map, &t_index);
+        std::vector<const xAOD::TruthParticle*> F = Intersection(t_map, g_J); 
+        if (F.size() != 0 ){ Tmp_Index.push_back(i); }
+      }
+      if (Tmp_Index.size() != 0 ){ Tmp_Index.push_back(-1); }
+      m_jet_topIndex.push_back( Tmp_Index );
+
+      for (const xAOD::TruthParticle* C : g_J)
+      {
+        FillVector(C, &m_jet_children_pt, 
+            &m_jet_children_e, &m_jet_children_phi, 
+            &m_jet_children_eta, &m_jet_children_charge, 
+            &m_jet_children_pdgid);
+        m_jet_children_index.push_back(j); 
+      }
+    }
+  
+    // Record the truthjet constituents and record any top contributions
+    for (unsigned int j(0); j < m_truthjets -> size(); j++)
+    {
+      std::vector<const xAOD::TruthParticle*> g_J = (*m_truthjets)[j] -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons");
+      
+      std::vector<int> Tmp_Index; 
+      for (unsigned int i(0); i < Tops_.size(); i++)
+      {
+        const xAOD::TruthParticle* T = Tops_[i]; 
+        std::vector<const xAOD::TruthParticle*> t_map; 
+        std::vector<int> t_index; 
+
+        GetPath(T, 0, &t_map, &t_index);
+        std::vector<const xAOD::TruthParticle*> F = Intersection(t_map, g_J); 
+        if (F.size() != 0 ){ Tmp_Index.push_back(i); }
+      }
+      if (Tmp_Index.size() != 0 ){ Tmp_Index.push_back(-1); }
+      m_truthjet_topIndex.push_back( Tmp_Index );
+      
+      for (const xAOD::TruthParticle* C : g_J)
+      {
+        FillVector(C, &m_truthjet_children_pt, 
+            &m_truthjet_children_e, &m_truthjet_children_phi, 
+            &m_truthjet_children_eta, &m_truthjet_children_charge, 
+            &m_truthjet_children_pdgid);
+        m_truthjet_children_index.push_back(j); 
+      }
+      
+      m_truthjet_pt.push_back((*m_truthjets)[j] -> pt()); 
+      m_truthjet_e.push_back((*m_truthjets)[j] -> e()); 
+      m_truthjet_eta.push_back((*m_truthjets)[j] -> eta()); 
+      m_truthjet_phi.push_back((*m_truthjets)[j] -> phi()); 
+      m_truthjet_pdgid.push_back((float)(*m_truthjets)[j] -> auxdata<int>("PartonTruthLabelID")); 
+    }
+
+
     top::EventSaverFlatNtuple::saveEvent(event); 
   }
 

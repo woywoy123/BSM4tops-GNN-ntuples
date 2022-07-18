@@ -24,12 +24,16 @@ void FillVector(
     std::vector<float>* pt, 
     std::vector<float>* e, 
     std::vector<float>* phi, 
-    std::vector<float>* eta)
+    std::vector<float>* eta, 
+    std::vector<float>* charge, 
+    std::vector<float>* pdgid)
 {
   pt -> push_back(T -> pt()); 
   e -> push_back(T -> e()); 
   phi -> push_back(T -> phi()); 
   eta -> push_back(T -> eta()); 
+  charge -> push_back(T -> charge());
+  pdgid -> push_back(T -> pdgId());
 }
 
 std::vector<Truth_> Intersection(std::vector<Truth_> V1, std::vector<Truth_> V2);
