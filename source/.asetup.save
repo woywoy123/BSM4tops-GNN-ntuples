@@ -6,15 +6,15 @@ export COOL_ORA_ENABLE_ADAPTIVE_OPT="Y"
 export ASETUP_PRINTLEVEL="0"
 export BINARY_TAG="x86_64-centos7-gcc8-opt"
 export CMTCONFIG="x86_64-centos7-gcc8-opt"
-export ASETUP_SYSBIN=`mktemp -d /tmp/tnom6927/.asetup-sysbin-XXXXXX_$$`
+export ASETUP_SYSBIN=`mktemp -d /tmp/woywoy12/.asetup-sysbin-XXXXXX_$$`
 source $AtlasSetup/scripts/sys_exe-alias.sh ''
 if [ -n "${MAKEFLAGS:+x}" ]; then
     asetup_flags=`echo ${MAKEFLAGS} | \grep ' -l'`
     if [ -z "${asetup_flags}" ]; then
-        export MAKEFLAGS="${MAKEFLAGS} -l12"
+        export MAKEFLAGS="${MAKEFLAGS} -l20"
     fi
 else
-    export MAKEFLAGS="-j12 -l12"
+    export MAKEFLAGS="-j20 -l20"
 fi
 source /cvmfs/sft.cern.ch/lcg/releases/gcc/8.3.0-cebb0/x86_64-centos7/setup.sh
 export CC=`\env which gcc 2>/dev/null`
@@ -51,7 +51,8 @@ asetup_status=$?
 if [ ${asetup_status} -ne 0 ]; then
     \echo "AtlasSetup(ERROR): sourcing release setup script (/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBase/21.2.197/InstallArea/x86_64-centos7-gcc8-opt/setup.sh) failed"
 fi
-export TestArea="/suphys/tnom6927/bsm4tops-gnn-ntuples/source"
+export TestArea="/nfs/dust/atlas/user/woywoy12/AnalysisTop/bsm4tops-gnn-ntuples/source"
+alias_sys_exe emacs
 echo $LD_LIBRARY_PATH | egrep "LCG_[^/:]*/curl/" >/dev/null
 if [ $? -eq 0 ]; then
     alias_sys_exe_envU git
