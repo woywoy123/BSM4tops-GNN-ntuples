@@ -55,7 +55,7 @@ def DumpRucio(f, SMPL):
             ]
     Write(rucio, f)
 
-r = "/nfs/dust/atlas/user/woywoy12/AnalysisTop/bsm4tops-gnn-ntuples/"
+r = "/home/tnom6927/bsm4tops-gnn-ntuples/"
 ANA= r + "MultiProcessing/Sorted"
 PROC= r + "MultiProcessing/Sorted"
 INPT = r

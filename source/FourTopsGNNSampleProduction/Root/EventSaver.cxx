@@ -49,6 +49,7 @@ namespace top {
      
       int res = 0; 
       if (IsFinalBSMZ(T)){res=1;}
+      if (IsFinalBSMH(T)){res=1;}
       FillVector(T, &m_top_pt, &m_top_e, &m_top_phi, &m_top_eta, &m_top_charge, &m_top_pdgid);
       m_top_FromRes.push_back(res); 
       m_top_index.push_back(p);

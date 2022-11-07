@@ -22,4 +22,14 @@ bool IsFinalBSMZ(const xAOD::TruthParticle* Particle)
   return false;
 }
 
+bool IsFinalBSMH(const xAOD::TruthParticle* Particle)
+{
+  for (unsigned int i(0); i < Particle -> nParents(); i++)
+  {
+    if (ParticleID::isBSMH( Particle -> parent(i) -> pdgId())){return true;}
+    else{return IsFinalBSMH(Particle -> parent(i));}
+  }
+  return false;
+}
+
 
