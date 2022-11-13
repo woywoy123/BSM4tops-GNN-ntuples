@@ -4,206 +4,182 @@
 #include "TopAnalysis/EventSaverFlatNtuple.h"
 #include "TopPartons/PartonHistory.h"
 #include "xAODTruth/TruthParticle.h"
-#include "fstream"
 
-namespace top {
-  class EventSaver : public top::EventSaverFlatNtuple {
+typedef std::vector<float> _fvec; 
+typedef std::vector<int> _ivec;
+typedef std::vector<_fvec> __fvec; 
+typedef std::vector<_ivec> __ivec; 
+
+namespace top
+{
+  class EventSaver : public top::EventSaverFlatNtuple
+  {
     public:
       EventSaver(); 
       virtual ~EventSaver() {}
-      virtual void initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches) override; 
+      virtual void initialize(std::shared_ptr<top::TopConfig> config,
+                              TFile* file, 
+                              const std::vector<std::string>& extraBranches)
+                              override; 
+
       virtual StatusCode initialize() override { return StatusCode::SUCCESS; }
       virtual void saveEvent(const top::Event& event) override; 
 
-
     private:
-      TFile* F; 
-      float m_genFilHT; 
-      float PT_Cut = 15000; 
-      float ETA_Cut = 2.5; 
-
-      typedef std::vector<float> vec_f; 
-      typedef std::vector<int> vec_i; 
-
-      // Truth Tops in Sample
-      std::vector<float> m_top_pt; 
-      std::vector<float> m_top_e; 
-      std::vector<float> m_top_eta; 
-      std::vector<float> m_top_phi; 
-      std::vector<float> m_top_charge; 
-      std::vector<float> m_top_pdgid; 
-      std::vector<int> m_top_index; 
-      std::vector<int> m_top_FromRes; 
-
-      // Children from Tops - Entire decay chain 
-      std::vector<float> m_top_children_pt; 
-      std::vector<float> m_top_children_e; 
-      std::vector<float> m_top_children_eta; 
-      std::vector<float> m_top_children_phi; 
-      std::vector<float> m_top_children_charge; 
-      std::vector<float> m_top_children_pdgid; 
-      std::vector<int> m_top_children_index; 
-      std::vector<int> m_top_children_TopIndex; 
-      std::vector<std::vector<int>> m_top_children_JetIndex; 
-      std::vector<std::vector<int>> m_top_children_TruthJetIndex; 
-      
-      // Tops contributing to Jets
-      std::vector<std::vector<int>> m_jet_topIndex; 
-      std::vector<std::vector<int>> m_truthjet_topIndex; 
-
-      // Collecting the jet's constituents 
-      std::vector<float> m_jet_children_pt; 
-      std::vector<float> m_jet_children_e; 
-      std::vector<float> m_jet_children_eta; 
-      std::vector<float> m_jet_children_phi; 
-      std::vector<float> m_jet_children_charge; 
-      std::vector<float> m_jet_children_pdgid; 
-      std::vector<int> m_jet_children_index; 
- 
-      // Collecting the Truth jet's constituents 
-      std::vector<float> m_truthjet_children_pt; 
-      std::vector<float> m_truthjet_children_e; 
-      std::vector<float> m_truthjet_children_eta; 
-      std::vector<float> m_truthjet_children_phi; 
-      std::vector<float> m_truthjet_children_charge; 
-      std::vector<float> m_truthjet_children_pdgid; 
-      std::vector<int> m_truthjet_children_index; 
-
-      // Collecting the Truth jet properties
-      std::vector<float> m_truthjet_pt; 
-      std::vector<float> m_truthjet_e; 
-      std::vector<float> m_truthjet_eta; 
-      std::vector<float> m_truthjet_phi; 
-      std::vector<float> m_truthjet_pdgid; 
-
-
+      TFile* F;
       ClassDefOverride(top::EventSaver, 0); 
       
-      void ClearVector()
+      float m_genFilHT; 
+      bool LargeFiles = true; 
+
+      // Truth Tops in Sample 
+      _fvec m_top_pt; 
+      _fvec m_top_e; 
+      _fvec m_top_eta; 
+      _fvec m_top_phi; 
+
+      _ivec m_top_charge; 
+      _ivec m_top_pdgid; 
+      _ivec m_top_index; 
+      _ivec m_top_FromRes; 
+      
+      // Truth Children in sample
+      __fvec m_children_pt; 
+      __fvec m_children_e; 
+      __fvec m_children_eta; 
+      __fvec m_children_phi; 
+
+      __ivec m_children_charge; 
+      __ivec m_children_pdgid; 
+      __ivec m_children_TopIndex; 
+     
+      // Truth Jets in Sample
+      _fvec m_truthjets_pt; 
+      _fvec m_truthjets_e; 
+      _fvec m_truthjets_eta; 
+      _fvec m_truthjets_phi; 
+      __ivec m_truthjets_TopIndex;
+
+      // Collect the partons matched to the children of the decay chain
+      __fvec m_truJparton_pt; 
+      __fvec m_truJparton_e; 
+      __fvec m_truJparton_eta; 
+      __fvec m_truJparton_phi;
+      __ivec m_truJparton_charge; 
+      __ivec m_truJparton_pdgid; 
+      __ivec m_truJparton_ChildIndex; 
+
+      // Jets in Sample
+      __ivec m_jets_TopIndex;
+
+      // Collect the partons matched to the children of the decay chain
+      __fvec m_Jparton_pt; 
+      __fvec m_Jparton_e; 
+      __fvec m_Jparton_eta; 
+      __fvec m_Jparton_phi;
+      __ivec m_Jparton_charge; 
+      __ivec m_Jparton_pdgid; 
+      __ivec m_Jparton_ChildIndex; 
+
+      void ClearVectors()
       {
         m_genFilHT = -99; 
 
-        // Truth Tops in Sample
-        m_top_pt.clear();  
-        m_top_e.clear();  
-        m_top_eta.clear();  
-        m_top_phi.clear();  
-        m_top_charge.clear();  
-        m_top_pdgid.clear();  
-        m_top_index.clear();  
-        m_top_FromRes.clear();  
+        // Truth Tops in Sample 
+        m_top_pt.clear(); 
+        m_top_e.clear(); 
+        m_top_eta.clear(); 
+        m_top_phi.clear(); 
 
-        // Children from Tops - Entire decay chain 
-        m_top_children_pt.clear();  
-        m_top_children_e.clear();  
-        m_top_children_eta.clear();  
-        m_top_children_phi.clear();  
-        m_top_children_charge.clear();  
-        m_top_children_pdgid.clear();  
-        m_top_children_index.clear();  
-        m_top_children_TopIndex.clear();  
-        m_top_children_JetIndex.clear();  
-        m_top_children_TruthJetIndex.clear();  
-        
-        // Tops contributing to Jets
-        m_jet_topIndex.clear();  
-        m_truthjet_topIndex.clear();  
+        m_top_charge.clear(); 
+        m_top_pdgid.clear(); 
+        m_top_index.clear(); 
+        m_top_FromRes.clear(); 
+      
+        // Truth Children in sample
+        m_children_pt.clear(); 
+        m_children_e.clear(); 
+        m_children_eta.clear(); 
+        m_children_phi.clear(); 
+        m_children_charge.clear(); 
+        m_children_pdgid.clear(); 
+        m_children_TopIndex.clear(); 
 
-        // Collecting the jet's constituents 
-        m_jet_children_pt.clear();  
-        m_jet_children_e.clear();  
-        m_jet_children_eta.clear();  
-        m_jet_children_phi.clear();  
-        m_jet_children_charge.clear();  
-        m_jet_children_pdgid.clear();  
-        m_jet_children_index.clear();  
- 
-        // Collecting the Truth jet's constituents 
-        m_truthjet_children_pt.clear();  
-        m_truthjet_children_e.clear();  
-        m_truthjet_children_eta.clear();  
-        m_truthjet_children_phi.clear();  
-        m_truthjet_children_charge.clear();  
-        m_truthjet_children_pdgid.clear();  
-        m_truthjet_children_index.clear();  
-
-        // Collecting the Truth jet properties
-        m_truthjet_pt.clear();
-        m_truthjet_e.clear();
-        m_truthjet_eta.clear();
-        m_truthjet_phi.clear();
-        m_truthjet_pdgid.clear();
+        // Truth Jets in Sample
+        m_truthjets_pt.clear(); 
+        m_truthjets_e.clear(); 
+        m_truthjets_eta.clear(); 
+        m_truthjets_phi.clear(); 
+        m_truthjets_TopIndex.clear();
+  
+        // Collect the partons matched to the children of the decay chain
+        m_truJparton_pt.clear(); 
+        m_truJparton_e.clear(); 
+        m_truJparton_eta.clear(); 
+        m_truJparton_phi.clear();
+        m_truJparton_charge.clear(); 
+        m_truJparton_pdgid.clear(); 
+        m_truJparton_ChildIndex.clear(); 
+  
+        // Jets in Sample
+        m_jets_TopIndex.clear();
+  
+        // Collect the partons matched to the children of the decay chain
+        m_Jparton_pt.clear(); 
+        m_Jparton_e.clear(); 
+        m_Jparton_eta.clear(); 
+        m_Jparton_phi.clear();
+        m_Jparton_charge.clear(); 
+        m_Jparton_pdgid.clear(); 
+        m_Jparton_ChildIndex.clear(); 
       }
 
       void FillBranches()
       {
-
         for (auto systematicTree : treeManagers())
         {
-
-
-          // Truth Tops in Sample
-          systematicTree -> makeOutputVariable(m_top_pt, "top_pt");  
-          systematicTree -> makeOutputVariable(m_top_e, "top_e"); 
+          systematicTree -> makeOutputVariable(m_top_pt,  "top_pt"); 
+          systematicTree -> makeOutputVariable(m_top_e,   "top_e"); 
           systematicTree -> makeOutputVariable(m_top_eta, "top_eta"); 
           systematicTree -> makeOutputVariable(m_top_phi, "top_phi"); 
-          systematicTree -> makeOutputVariable(m_top_charge, "top_charge"); 
-          systematicTree -> makeOutputVariable(m_top_pdgid, "top_pdgid"); 
-          systematicTree -> makeOutputVariable(m_top_index, "top_index"); 
+          systematicTree -> makeOutputVariable(m_top_charge,  "top_charge"); 
+          systematicTree -> makeOutputVariable(m_top_pdgid,   "top_pdgid"); 
+          systematicTree -> makeOutputVariable(m_top_index,   "top_index"); 
           systematicTree -> makeOutputVariable(m_top_FromRes, "top_FromRes"); 
 
-          // Children from Tops - Entire decay chain 
-          systematicTree -> makeOutputVariable(m_top_children_pt, "children_pt");  
-          systematicTree -> makeOutputVariable(m_top_children_e,  "children_e"); 
-          systematicTree -> makeOutputVariable(m_top_children_eta,  "children_eta"); 
-          systematicTree -> makeOutputVariable(m_top_children_phi,  "children_phi"); 
-          systematicTree -> makeOutputVariable(m_top_children_charge,  "children_charge"); 
-          systematicTree -> makeOutputVariable(m_top_children_pdgid,  "children_pdgid"); 
-          systematicTree -> makeOutputVariable(m_top_children_index, "children_index"); 
+          systematicTree -> makeOutputVariable(m_children_pt,     "children_pt"); 
+          systematicTree -> makeOutputVariable(m_children_e,      "children_e"); 
+          systematicTree -> makeOutputVariable(m_children_eta,    "children_eta"); 
+          systematicTree -> makeOutputVariable(m_children_phi,    "children_phi"); 
+          systematicTree -> makeOutputVariable(m_children_charge, "children_charge"); 
+          systematicTree -> makeOutputVariable(m_children_pdgid,  "children_pdgid"); 
+          systematicTree -> makeOutputVariable(m_children_TopIndex, "children_TopIndex"); 
 
-          systematicTree -> makeOutputVariable(m_top_children_TopIndex,  "children_TopIndex"); 
-          systematicTree -> makeOutputVariable(m_top_children_JetIndex,  "children_JetIndex"); 
-          systematicTree -> makeOutputVariable(m_top_children_TruthJetIndex,  "children_TruthJetIndex"); 
-          
-          // Tops contributing to Jets
-          systematicTree -> makeOutputVariable(m_jet_topIndex, "jet_TopIndex"); 
-          systematicTree -> makeOutputVariable(m_truthjet_topIndex, "truthjet_TopIndex"); 
+          systematicTree -> makeOutputVariable(m_truthjets_pt,       "truthjet_pt"); 
+          systematicTree -> makeOutputVariable(m_truthjets_e,        "truthjet_e"); 
+          systematicTree -> makeOutputVariable(m_truthjets_eta,      "truthjet_eta"); 
+          systematicTree -> makeOutputVariable(m_truthjets_phi,      "truthjet_phi"); 
+          systematicTree -> makeOutputVariable(m_truthjets_TopIndex, "truthjet_TopIndex"); 
 
-          // Collecting the jet's constituents 
-          systematicTree -> makeOutputVariable(m_jet_children_pt, "jetChildren_pt");
-          systematicTree -> makeOutputVariable(m_jet_children_e, "jetChildren_e"); 
-          systematicTree -> makeOutputVariable(m_jet_children_eta, "jetChildren_eta");
-          systematicTree -> makeOutputVariable(m_jet_children_phi, "jetChildren_phi");
-          systematicTree -> makeOutputVariable(m_jet_children_charge, "jetChildren_charge");  
-          systematicTree -> makeOutputVariable(m_jet_children_pdgid, "jetChildren_pdgid");
-          systematicTree -> makeOutputVariable(m_jet_children_index, "jetChildren_index");
- 
-          // Collecting the Truth jet's constituents 
-          systematicTree -> makeOutputVariable(m_truthjet_children_pt, "truthjetChildren_pt");
-          systematicTree -> makeOutputVariable(m_truthjet_children_e, "truthjetChildren_e"); 
-          systematicTree -> makeOutputVariable(m_truthjet_children_eta, "truthjetChildren_eta");
-          systematicTree -> makeOutputVariable(m_truthjet_children_phi, "truthjetChildren_phi");
-          systematicTree -> makeOutputVariable(m_truthjet_children_charge, "truthjetChildren_charge");  
-          systematicTree -> makeOutputVariable(m_truthjet_children_pdgid, "truthjetChildren_pdgid");
-          systematicTree -> makeOutputVariable(m_truthjet_children_index, "truthjetChildren_index");
+          systematicTree -> makeOutputVariable(m_truJparton_pt,     "truJparton_pt"); 
+          systematicTree -> makeOutputVariable(m_truJparton_e,      "truJparton_e"); 
+          systematicTree -> makeOutputVariable(m_truJparton_eta,    "truJparton_eta"); 
+          systematicTree -> makeOutputVariable(m_truJparton_phi,    "truJparton_phi"); 
+          systematicTree -> makeOutputVariable(m_truJparton_charge, "truJparton_charge"); 
+          systematicTree -> makeOutputVariable(m_truJparton_pdgid,  "truJparton_pdgid"); 
+          systematicTree -> makeOutputVariable(m_truJparton_ChildIndex, "truJparton_ChildIndex"); 
 
+          systematicTree -> makeOutputVariable(m_Jparton_pt,     "Jparton_pt"); 
+          systematicTree -> makeOutputVariable(m_Jparton_e,      "Jparton_e"); 
+          systematicTree -> makeOutputVariable(m_Jparton_eta,    "Jparton_eta"); 
+          systematicTree -> makeOutputVariable(m_Jparton_phi,    "Jparton_phi"); 
+          systematicTree -> makeOutputVariable(m_Jparton_charge, "Jparton_charge"); 
+          systematicTree -> makeOutputVariable(m_Jparton_pdgid,  "Jparton_pdgid"); 
+          systematicTree -> makeOutputVariable(m_Jparton_ChildIndex, "Jparton_ChildIndex"); 
 
-          // Collecting the Truth jet properties
-          systematicTree -> makeOutputVariable(m_truthjet_pt, "truthjet_pt");
-          systematicTree -> makeOutputVariable(m_truthjet_e, "truthjet_e");
-          systematicTree -> makeOutputVariable(m_truthjet_eta, "truthjet_eta");
-          systematicTree -> makeOutputVariable(m_truthjet_phi, "truthjet_phi");
-          systematicTree -> makeOutputVariable(m_truthjet_pdgid, "truthjet_pdgid");
+          systematicTree -> makeOutputVariable(m_jets_TopIndex, "jet_TopIndex"); 
         }
       }
-
-
-      //void DumpLog(TString text)
-      //{
-      //  std::ofstream print;
-      //  print.open("log.txt", std::ios_base::app); 
-      //  print << text + "\n";
-      //}
   }; 
 }
 
