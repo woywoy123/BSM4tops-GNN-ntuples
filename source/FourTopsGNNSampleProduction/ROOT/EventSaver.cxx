@@ -72,8 +72,8 @@ namespace top
     
       std::vector<const xAOD::TruthParticle*> Children = ParticleID::FindChildren(top); 
       
-      std::vector<float> _pt, _e, _eta, _phi; 
-      std::vector<int> _ch, _pdg, __ti;
+      std::vector<float> _pt, _e, _eta, _phi, _ch; 
+      std::vector<int> _pdg, __ti;
       for (const xAOD::TruthParticle* c : Children)
       {
 
@@ -81,8 +81,8 @@ namespace top
         _e.push_back(c -> e()); 
         _eta.push_back(c -> eta()); 
         _phi.push_back(c -> phi()); 
-
         _ch.push_back(c -> charge()); 
+        
         _pdg.push_back(c -> pdgId());
         __ti.push_back( _ti ); 
 
@@ -136,16 +136,16 @@ namespace top
         ParticleID::GetDecayPath(c, &__TMP); 
         __TMP = Intersection(__TMP, all_partons); 
         
-        std::vector<float> __pt, __e, __eta, __phi; 
-        std::vector<int> __ch, __pdg, __idx;
+        std::vector<float> __pt, __e, __eta, __phi, __ch; 
+        std::vector<int> __pdg, __idx;
         for (const xAOD::TruthParticle* _c : __TMP)
         {
           __pt.push_back(_c -> pt()); 
           __e.push_back(_c -> e()); 
           __eta.push_back(_c -> eta()); 
           __phi.push_back(_c -> phi()); 
-
           __ch.push_back(_c -> charge()); 
+          
           __pdg.push_back(_c -> pdgId()); 
           __idx.push_back( _citj ); 
         }
@@ -187,16 +187,16 @@ namespace top
         ParticleID::GetDecayPath(c, &__TMP); 
         __TMP = Intersection(__TMP, all_partons); 
 
-        std::vector<float> __pt, __e, __eta, __phi; 
-        std::vector<int> __ch, __pdg, __idx;
+        std::vector<float> __pt, __e, __eta, __phi, __ch; 
+        std::vector<int> __pdg, __idx;
         for (const xAOD::TruthParticle* _c : __TMP)
         {
           __pt.push_back(_c -> pt()); 
           __e.push_back(_c -> e()); 
           __eta.push_back(_c -> eta()); 
           __phi.push_back(_c -> phi()); 
-
           __ch.push_back(_c -> charge()); 
+          
           __pdg.push_back(_c -> pdgId()); 
           __idx.push_back( _cij ); 
         }
@@ -204,8 +204,8 @@ namespace top
         m_Jparton_e.push_back(__e); 
         m_Jparton_eta.push_back(__eta); 
         m_Jparton_phi.push_back(__phi); 
-
         m_Jparton_charge.push_back(__ch); 
+        
         m_Jparton_pdgid.push_back(__pdg); 
         m_Jparton_ChildIndex.push_back(__idx); 
         

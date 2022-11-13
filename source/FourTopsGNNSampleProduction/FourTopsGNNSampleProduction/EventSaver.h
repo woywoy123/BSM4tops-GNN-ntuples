@@ -37,8 +37,8 @@ namespace top
       _fvec m_top_e; 
       _fvec m_top_eta; 
       _fvec m_top_phi; 
-
-      _ivec m_top_charge; 
+      _fvec m_top_charge; 
+      
       _ivec m_top_pdgid; 
       _ivec m_top_index; 
       _ivec m_top_FromRes; 
@@ -48,8 +48,8 @@ namespace top
       __fvec m_children_e; 
       __fvec m_children_eta; 
       __fvec m_children_phi; 
-
-      __ivec m_children_charge; 
+      __fvec m_children_charge; 
+      
       __ivec m_children_pdgid; 
       __ivec m_children_TopIndex; 
      
@@ -65,7 +65,8 @@ namespace top
       __fvec m_truJparton_e; 
       __fvec m_truJparton_eta; 
       __fvec m_truJparton_phi;
-      __ivec m_truJparton_charge; 
+      __fvec m_truJparton_charge; 
+
       __ivec m_truJparton_pdgid; 
       __ivec m_truJparton_ChildIndex; 
 
@@ -77,7 +78,8 @@ namespace top
       __fvec m_Jparton_e; 
       __fvec m_Jparton_eta; 
       __fvec m_Jparton_phi;
-      __ivec m_Jparton_charge; 
+      __fvec m_Jparton_charge; 
+
       __ivec m_Jparton_pdgid; 
       __ivec m_Jparton_ChildIndex; 
 
