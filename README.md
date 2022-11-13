@@ -10,15 +10,15 @@ This information is particularly important when training a Graph Neural Network 
 git clone ssh://git@gitlab.cern.ch:7999/hqt-bsm-4tops/bsm4tops-gnn-ntuples.git
 ``` 
 - Followed by; 
-```bash
+```
 source setup.sh
 ```
-- Once compiled, navigate to the `EventSelection` folder and select the desired configuration file for the derivation sample. Alternatively, new configuration files can be dumped using the ```bash python WriteConfig.py ``` script. 
+- Once compiled, navigate to the `EventSelection` folder and select the desired configuration file for the derivation sample. Alternatively, new configuration files can be dumped using the ```python WriteConfig.py ``` script. 
 
 ## Some Other Useful Scripts
 - Scripts contained within the `MultiProcessing` folder are reserved for Grid submissions or local multithreading jobs.
 To run locally, modify the `MakeConfigs.py` script as needed (i.e. output/inputs) and execute the `Running.sh` to start the process. 
-If Grid jobs need to be submitted in bulk, simply naviate into the 'Grid' folder and do ```python Build.py``` followed by ```python 01SubmitToGrid.py```. NOTE: Make sure to run ```bash lsetup panda``` before submitting jobs to the Grid.
+If Grid jobs need to be submitted in bulk, simply naviate into the 'Grid' folder and do ```python Build.py``` followed by ```python 01SubmitToGrid.py```. NOTE: Make sure to run ```lsetup panda``` before submitting jobs to the Grid.
 
 ## Structure of Output ROOT File
 - <particle_name>_pt: The transverse momenta.
@@ -41,10 +41,10 @@ If Grid jobs need to be submitted in bulk, simply naviate into the 'Grid' folder
 - Jparton: Partons contributing to the constructed jets. Again these are singly matched to individual children (by index) and can be used for debugging.
 
 ## Current Matching Scheme of Tops to (Truth)Jets
-- Initially, the generator particles are used to recursively call their children using ```c particle -> child(index); ```.
-- If any of those children contain the absolute value of the PDGID of a top, then those are added to a list of tops (```c particle -> pdgId(); ```). 
+- Initially, the generator particles are used to recursively call their children using ```particle -> child(index); ```.
+- If any of those children contain the absolute value of the PDGID of a top, then those are added to a list of tops (```particle -> pdgId(); ```). 
 - Tops within the list are recursively scanned for their children until none of the children contain the top PDGID, i.e. the top has undergone gluon radiation.
 - The very last instance of the top-quark (FSR) is then used as the seed, to recursively scan and record the decay chain objects. This is repeated for n-Tops.
 - This decay list is subsequently used to find common object addresses within the (truth)jets using the class method; 
-```c jet -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons")``` 
+```jet -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons");``` 
 - If the parton and decay chain lists share common object addresses, then the (truth)jet is marked with the index of the corresponding top (i.e. `TopIndex`).
