@@ -12,11 +12,9 @@ function CondorBuild
   echo "queue 1"  >> $1/example.submit
 }
 
-python WriteConfig.py
-
 ROOT=$PWD
-mkdir -p Output
-mkdir -p Samples
+mkdir -p $ROOT/Output
+mkdir -p $ROOT/Samples
 
 cpu=()
 while true

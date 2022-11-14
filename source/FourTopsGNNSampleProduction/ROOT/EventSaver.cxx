@@ -102,7 +102,8 @@ namespace top
       ParticleID::GetDecayPath(top, &_TMP); 
       
       // Match the decay chain to the truth jets 
-      std::vector<const xAOD::TruthParticle*> all_partons; 
+      std::vector<const xAOD::TruthParticle*> all_partons;
+      std::vector<int> trujet_index; 
       for (unsigned int j(0); j < m_truthjets -> size(); j++)
       {
         if (m_truthjets_TopIndex.size() < j+1){ m_truthjets_TopIndex.push_back({-1}); }
@@ -118,7 +119,9 @@ namespace top
         // Check whether any of the decay children addresses are found within the truth jets
         std::vector<const xAOD::TruthParticle*> trujetparton = (*m_truthjets)[j] -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons");
         std::vector<const xAOD::TruthParticle*> sim = Intersection(_TMP, trujetparton); 
-        all_partons.insert(all_partons.end(), trujetparton.begin(), trujetparton.end()); 
+        
+        all_partons.insert(all_partons.end(), trujetparton.begin(), trujetparton.end());
+        for ( const xAOD::TruthParticle* k : trujetparton ){ trujet_index.push_back(j); }
 
         if (sim.size() != 0)
         {
@@ -134,10 +137,10 @@ namespace top
 
         std::vector<const xAOD::TruthParticle*> __TMP; 
         ParticleID::GetDecayPath(c, &__TMP); 
-        __TMP = Intersection(__TMP, all_partons); 
+        __TMP = Intersection(__TMP, all_partons);
         
         std::vector<float> __pt, __e, __eta, __phi, __ch; 
-        std::vector<int> __pdg, __idx;
+        std::vector<int> __pdg, __idx, __idx_tj;
         for (const xAOD::TruthParticle* _c : __TMP)
         {
           __pt.push_back(_c -> pt()); 
@@ -148,7 +151,10 @@ namespace top
           
           __pdg.push_back(_c -> pdgId()); 
           __idx.push_back( _citj ); 
+          
+          __idx_tj.push_back( trujet_index.at(FindObject(_c, all_partons)) ); 
         }
+
         m_truJparton_pt.push_back(__pt); 
         m_truJparton_e.push_back(__e); 
         m_truJparton_eta.push_back(__eta); 
@@ -156,20 +162,24 @@ namespace top
 
         m_truJparton_charge.push_back(__ch); 
         m_truJparton_pdgid.push_back(__pdg); 
-        m_truJparton_ChildIndex.push_back(__idx); 
+        m_truJparton_ChildIndex.push_back(__idx);
+        m_truJparton_TruJetIndex.push_back(__idx_tj); 
         
         _citj++; 
       }
 
       // Check whether any of the decay children addresses are found within the jets
-      all_partons.clear(); 
+      all_partons.clear();
+      trujet_index.clear(); 
       for (unsigned int j(0); j < event.m_jets.size(); j++)
       {
         if (m_jets_TopIndex.size() < j+1){ m_jets_TopIndex.push_back({-1}); }
 
         std::vector<const xAOD::TruthParticle*> jetparton = event.m_jets.at(j) -> getAssociatedObjects<xAOD::TruthParticle>("GhostPartons");
         std::vector<const xAOD::TruthParticle*> sim = Intersection(_TMP, jetparton); 
+        
         all_partons.insert(all_partons.end(), jetparton.begin(), jetparton.end()); 
+        for ( const xAOD::TruthParticle* k : jetparton ){ trujet_index.push_back(j); }
         
         if (sim.size() != 0)
         {
@@ -188,7 +198,7 @@ namespace top
         __TMP = Intersection(__TMP, all_partons); 
 
         std::vector<float> __pt, __e, __eta, __phi, __ch; 
-        std::vector<int> __pdg, __idx;
+        std::vector<int> __pdg, __idx, __idx_j;
         for (const xAOD::TruthParticle* _c : __TMP)
         {
           __pt.push_back(_c -> pt()); 
@@ -199,7 +209,10 @@ namespace top
           
           __pdg.push_back(_c -> pdgId()); 
           __idx.push_back( _cij ); 
+
+          __idx_j.push_back( trujet_index.at(FindObject(_c, all_partons)) ); 
         }
+
         m_Jparton_pt.push_back(__pt); 
         m_Jparton_e.push_back(__e); 
         m_Jparton_eta.push_back(__eta); 
@@ -208,6 +221,7 @@ namespace top
         
         m_Jparton_pdgid.push_back(__pdg); 
         m_Jparton_ChildIndex.push_back(__idx); 
+        m_Jparton_JetIndex.push_back(__idx_j); 
         
         _cij++; 
       }

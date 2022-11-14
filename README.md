@@ -31,6 +31,8 @@ If Grid jobs need to be submitted in bulk, simply naviate into the 'Grid' folder
 - <particle_name>_index: The index of the top-quark.
 - <particle_name>_TopIndex: The index of the top-quark that the particle has been matched with.
 - <particle_name>_ChildIndex: The index of the child that the particle has been matched with (child meaning the FIRST decay products of the top-quark).
+- <particle_name>_TruJetIndex: The index of the truthjet from which this parton was extracted from.
+- <particle_name>_JetIndex: The index of the jet from which this parton was extracted from.
 
 ## Particle Names
 - children: These are the direct decay products of the top-quark. If one of the decay products is a W-boson, the children are used instead.

@@ -45,3 +45,12 @@ std::vector<Truth_> Intersection(std::vector<Truth_> V1, std::vector<Truth_> V2)
   return output;
 }
 
+int FindObject(Truth_ obj, std::vector<Truth_> V1)
+{
+  int index = -1; 
+  for (unsigned int i(0); i < V1.size(); i++)
+  {
+    if (V1.at(i) == obj){ index = i; break; }
+  }
+  return index; 
+}

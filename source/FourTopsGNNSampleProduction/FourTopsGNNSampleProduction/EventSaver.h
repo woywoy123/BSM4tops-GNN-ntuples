@@ -68,7 +68,8 @@ namespace top
       __fvec m_truJparton_charge; 
 
       __ivec m_truJparton_pdgid; 
-      __ivec m_truJparton_ChildIndex; 
+      __ivec m_truJparton_ChildIndex;
+      __ivec m_truJparton_TruJetIndex; 
 
       // Jets in Sample
       __ivec m_jets_TopIndex;
@@ -82,6 +83,7 @@ namespace top
 
       __ivec m_Jparton_pdgid; 
       __ivec m_Jparton_ChildIndex; 
+      __ivec m_Jparton_JetIndex; 
 
       void ClearVectors()
       {
@@ -122,6 +124,7 @@ namespace top
         m_truJparton_charge.clear(); 
         m_truJparton_pdgid.clear(); 
         m_truJparton_ChildIndex.clear(); 
+        m_truJparton_TruJetIndex.clear();
   
         // Jets in Sample
         m_jets_TopIndex.clear();
@@ -133,7 +136,8 @@ namespace top
         m_Jparton_phi.clear();
         m_Jparton_charge.clear(); 
         m_Jparton_pdgid.clear(); 
-        m_Jparton_ChildIndex.clear(); 
+        m_Jparton_ChildIndex.clear();
+        m_Jparton_JetIndex.clear(); 
       }
 
       void FillBranches()
@@ -170,6 +174,7 @@ namespace top
           systematicTree -> makeOutputVariable(m_truJparton_charge, "truJparton_charge"); 
           systematicTree -> makeOutputVariable(m_truJparton_pdgid,  "truJparton_pdgid"); 
           systematicTree -> makeOutputVariable(m_truJparton_ChildIndex, "truJparton_ChildIndex"); 
+          systematicTree -> makeOutputVariable(m_truJparton_TruJetIndex, "truJparton_TruJetIndex"); 
 
           systematicTree -> makeOutputVariable(m_Jparton_pt,     "Jparton_pt"); 
           systematicTree -> makeOutputVariable(m_Jparton_e,      "Jparton_e"); 
@@ -177,7 +182,8 @@ namespace top
           systematicTree -> makeOutputVariable(m_Jparton_phi,    "Jparton_phi"); 
           systematicTree -> makeOutputVariable(m_Jparton_charge, "Jparton_charge"); 
           systematicTree -> makeOutputVariable(m_Jparton_pdgid,  "Jparton_pdgid"); 
-          systematicTree -> makeOutputVariable(m_Jparton_ChildIndex, "Jparton_ChildIndex"); 
+          systematicTree -> makeOutputVariable(m_Jparton_ChildIndex, "Jparton_ChildIndex");
+          systematicTree -> makeOutputVariable(m_Jparton_JetIndex, "Jparton_JetIndex");
 
           systematicTree -> makeOutputVariable(m_jets_TopIndex, "jet_TopIndex"); 
         }

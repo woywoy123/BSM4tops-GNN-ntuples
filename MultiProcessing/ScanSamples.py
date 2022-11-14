@@ -30,14 +30,14 @@ def DumpConfig(f, SRCDir, OutDir, config):
     Write(script, f)
 
 
+src = "/home/tnom6927/bsm4tops-gnn-ntuples" 
+Samples = "/CERN/Samples/Transferred/Dilepton/Samples/"
+Output = "/CERN/Samples/Transferred/Dilepton/Output/"
+
 mc = {}
-r = "/home/tnom6927/bsm4tops-gnn-ntuples" 
 mc["r9364"] = "/CERN/Samples/Transferred/Dilepton/Configs/DiLeptonJet_MC_a.txt"
 mc["r10201"] = "/CERN/Samples/Transferred/Dilepton/Configs/DiLeptonJet_MC_d.txt"
 mc["r10724"] = "/CERN/Samples/Transferred/Dilepton/Configs/DiLeptonJet_MC_e.txt"
-
-Samples = "/CERN/Samples/Transferred/Dilepton/Samples/"
-Output = "/CERN/Samples/Transferred/Dilepton/Output/"
 
 FinDL = {}
 FinProc = {}
@@ -67,7 +67,7 @@ for i in FinDL:
 
     x = [k for k in SMPL.split("_") if k in mc]
     Conf = mc[x[0]]
-    DumpConfig(OutDir + "/Out.sh", r, OutDir, Conf) 
+    DumpConfig(OutDir + "/Out.sh", src, OutDir, Conf) 
     Write([FinDL[i] + ","], OutDir + "/smpl.txt")
 
 
