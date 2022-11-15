@@ -1,0 +1,331 @@
+####################################################################################################
+#                                                                                                  #
+# SELECTION CONFIGURATION                                                                          #
+#                                                                                                  #
+####################################################################################################
+
+
+####################################################################################################
+#                                                                                                  #
+# PACKAGE LIBRARIES                                                                                #
+#                                                                                                  #
+####################################################################################################
+
+LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libFourTopsGNNSampleProduction
+
+####################################################################################################
+#                                                                                                  #
+# OBJECT DEFINITION                                                                                #
+#                                                                                                  #
+####################################################################################################
+
+ObjectSelectionName top::ObjectLoaderStandardCuts
+# -- Collections
+ElectronCollectionName Electrons
+MuonCollectionName Muons
+TauCollectionName None
+PhotonCollectionName None
+LargeJetCollectionName None
+JetCollectionName AntiKt4EMPFlowJets_BTagging201903
+
+# -- Structure
+LargeJetSubstructure None
+UseRCJetSubstructure False
+
+# -- RC Jets
+UseRCJets True
+RCJetPt 200000.0
+OverlapRemovalProcedure BoostedSlidingDRMu
+OverlapRemovalLeptonDef Tight
+
+####################################################################################################
+#                                                                                                  #
+# TRUTH COLLECTIONS AND SETTINGS                                                                   #
+#                                                                                                  #
+####################################################################################################
+
+TruthCollectionName TruthParticles
+TruthJetCollectionName AntiKt4TruthWZJets
+
+####################################################################################################
+#                                                                                                  #
+# OBJECT LOADER AND OBJECT SELECTIONS                                                              #
+#                                                                                                  #
+####################################################################################################
+
+ElectronID TightLH
+ElectronIDLoose MediumLH
+MuonQuality Medium
+MuonQualityLoose Medium
+
+ElectronIsolation FCTight
+MuonIsolation FCTightTrackOnly
+ElectronIsolationLoose None
+MuonIsolationLoose None
+UseElectronChargeIDSelection False
+
+# -- PT
+ElectronPt 28000
+MuonPt 28000
+JetPt 25000
+
+# -- bTagging
+BTaggingWP DL1:FixedCutBEff_77 DL1r:FixedCutBEff_77 DL1:FixedCutBEff_70 DL1r:FixedCutBEff_70 DL1:FixedCutBEff_60 DL1r:FixedCutBEff_60 DL1:FixedCutBEff_85 DL1r:FixedCutBEff_85
+
+DoLoose False
+DoTight Both
+ApplyTightSFsInLooseTree True
+
+####################################################################################################
+#                                                                                                  #
+# CDI File Settings                                                                                #
+#                                                                                                  #
+####################################################################################################
+
+BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2021-04-16_v1.root
+
+####################################################################################################
+#                                                                                                  #
+# EXPERIMENTAL                                                                                     #
+#                                                                                                  #
+####################################################################################################
+
+Systematics nominal
+NominalWeightNames " nominal ","nominal","Default","Weight","1001"," muR=0.10000E+01 muF=0.10000E+01 ",""," "," dyn=   3 muR=0.10000E+01 muF=0.10000E+01 "," mur=1 muf=1 "," dyn=  10 muR=0.10000E+01 muF=0.10000E+01 ","45"
+
+####################################################################################################
+#                                                                                                  #
+# EVENT SAVER                                                                                      #
+#                                                                                                  #
+####################################################################################################
+
+OutputFormat top::EventSaver
+OutputFilename output.root
+OutputEvents SelectedEvents
+OutputFileSetAutoFlushZero True
+
+####################################################################################################
+#                                                                                                  #
+# PILEUP CONFIG                                                                                    #
+#                                                                                                  #
+####################################################################################################
+
+# -- MCa
+PRWConfigFiles_FS FourTopsGNNSampleProduction/PRW/user.iconnell.Top.PRW.MC16a.FS.v2/prw.merged.root
+PRWConfigFiles_AF FourTopsGNNSampleProduction/PRW/user.iconnell.Top.PRW.MC16a_BSMH.AF.v2/prw.merged.root
+PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20180129/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-009.root
+
+####################################################################################################
+#                                                                                                  #
+# GOOD RUN LIST                                                                                    #
+#                                                                                                  #
+####################################################################################################
+
+GRLDir GoodRunsLists
+GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml data18_13TeV/20190219/physics_25ns_Triggerno17e33prim.xml
+
+####################################################################################################
+#                                                                                                  #
+# Meta-data                                                                                        #
+#                                                                                                  #
+####################################################################################################
+
+UseAodMetaData True
+
+####################################################################################################
+#                                                                                                  #
+# SELECTIONS                                                                                       #
+#                                                                                                  #
+####################################################################################################
+
+
+####################################################################################################
+# global trigger definition                                                                        #
+####################################################################################################
+
+UseGlobalLeptonTriggerSF True
+GlobalTriggers 2015@e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose,mu20_iloose_L1MU15_OR_mu50 2016@e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0,mu26_ivarmedium_OR_mu50 2017@e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0,mu26_ivarmedium_OR_mu50 2018@e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0,mu26_ivarmedium_OR_mu50
+GlobalTriggersLoose 2015@e24_lhmedium_L1EM20VH_OR_e60_lhmedium_OR_e120_lhloose,mu20_iloose_L1MU15_OR_mu50 2016@e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0,mu26_ivarmedium_OR_mu50 2017@e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0,mu26_ivarmedium_OR_mu50 2018@e26_lhtight_nod0_ivarloose_OR_e60_lhmedium_nod0_OR_e140_lhloose_nod0,mu26_ivarmedium_OR_mu50
+
+####################################################################################################
+# BASIC                                                                                            #
+####################################################################################################
+
+SUB BASIC
+RECO_LEVEL
+GOODCALO
+INITIAL
+PRIVTX
+GRL
+
+###############################################################################
+# ee_basic                                                                    #
+###############################################################################
+
+SUB ee_basic
+. BASIC
+GTRIGDEC
+EL_N_TIGHT 28000 == 2
+JETCLEAN LooseBad
+MU_N 10000 == 0
+EL_N 10000 == 2
+JET_N 25000 >= 4
+GTRIGMATCH
+
+###############################################################################
+# mumu_basic                                                                  #
+###############################################################################
+
+SUB mumu_basic
+. BASIC
+GTRIGDEC
+MU_N_TIGHT 28000 == 2
+MU_N 10000 == 2
+EL_N 10000 == 0
+JETCLEAN LooseBad
+JET_N 25000 >= 4
+GTRIGMATCH
+
+###############################################################################
+# emu_basic                                                                   #
+###############################################################################
+
+SUB emu_basic
+. BASIC
+GTRIGDEC
+MU_N 10000 >= 1
+EL_N_TIGHT 28000 == 1
+EL_N 10000 == 1
+JET_N 25000 >= 4
+MU_N_TIGHT 28000 == 1
+JETCLEAN LooseBad
+GTRIGMATCH
+
+###############################################################################
+# eee_basic                                                                    #
+###############################################################################
+
+SUB eee_basic
+. BASIC
+GTRIGDEC
+EL_N_TIGHT 28000 == 3
+JETCLEAN LooseBad
+MU_N 10000 == 0
+EL_N 10000 == 3
+JET_N 25000 >= 4
+GTRIGMATCH
+
+###############################################################################
+# eemu_basic                                                                  #
+###############################################################################
+
+SUB eemu_basic
+. BASIC
+GTRIGDEC
+EL_N_TIGHT 28000 == 2
+MU_N_TIGHT 28000 == 1
+JETCLEAN LooseBad
+MU_N 10000 >= 1
+EL_N 10000 == 2
+JET_N 25000 >= 4
+GTRIGMATCH
+
+###############################################################################
+# emumu_basic                                                                 #
+###############################################################################
+
+SUB emumu_basic
+. BASIC
+GTRIGDEC
+EL_N_TIGHT 28000 == 1
+MU_N_TIGHT 28000 == 2
+JETCLEAN LooseBad
+MU_N 10000 >= 2
+EL_N 10000 == 1
+JET_N 25000 >= 4
+GTRIGMATCH
+
+###############################################################################
+# mumumu_basic                                                                #
+###############################################################################
+
+SUB mumumu_basic
+. BASIC
+GTRIGDEC
+MU_N_TIGHT 28000 == 3
+JETCLEAN LooseBad
+MU_N 10000 >= 3
+EL_N 10000 == 0
+JET_N 25000 >= 4
+GTRIGMATCH
+
+###############################################################################
+# Nbtag_DL1r                                                                  #
+###############################################################################
+
+SUB Nbtag_DL1r
+JET_N_BTAG DL1r:FixedCutBEff_77 >= 2
+
+
+###############################################################################
+# ee_DL1r                                                                     #
+###############################################################################
+
+SELECTION ee_DL1r
+. ee_basic
+. Nbtag_DL1r
+SAVE
+
+###############################################################################
+# emu_DL1r                                                                    #
+###############################################################################
+
+SELECTION emu_DL1r
+. emu_basic
+. Nbtag_DL1r
+SAVE
+
+###############################################################################
+# mumu_DL1r                                                                   #
+###############################################################################
+
+SELECTION mumu_DL1r
+. mumu_basic
+. Nbtag_DL1r
+SAVE
+
+###############################################################################
+# eee_DL1r                                                                    #
+###############################################################################
+
+SELECTION eee_DL1r
+. eee_basic
+. Nbtag_DL1r
+SAVE
+
+###############################################################################
+# eemu_DL1r                                                                   #
+###############################################################################
+
+SELECTION eemu_DL1r
+. eemu_basic
+. Nbtag_DL1r
+SAVE
+
+###############################################################################
+# emumu_DL1r                                                                  #
+###############################################################################
+
+SELECTION emumu_DL1r
+. emumu_basic
+. Nbtag_DL1r
+SAVE
+
+###############################################################################
+# mumumu_DL1r                                                                 #
+###############################################################################
+
+SELECTION mumumu_DL1r
+. mumumu_basic
+. Nbtag_DL1r
+SAVE

@@ -95,6 +95,7 @@ def CurrentAnalysis(config):
 	config.UseRCJetSubstructure = -1
 	config.RCJetPt = -1
 	config.UseRCJets = -1
+	config.NominalWeightNames = str('" nominal ","nominal","Default","Weight","1001"," muR=0.10000E+01 muF=0.10000E+01 ",""," "," dyn=   3 muR=0.10000E+01 muF=0.10000E+01 "," mur=1 muf=1 "," dyn=  10 muR=0.10000E+01 muF=0.10000E+01 ","45"')
 	config.Default_Truth.TopPartonHistory = False
 	config.Default_Truth.BlockInfo = False
 	config.Default_Truth.PDFInfo = False
@@ -107,9 +108,9 @@ if __name__ == "__main__":
 		for i in [-1, 100]:
 			config = ConfigContainer()
 			if i == 100:
-				config.Filename = "SingleLeptonJet_MC_"+ j + "_Test"
+				config.Filename = "DileptonLeptonJet_MC_"+ j + "_Test"
 			else:
-				config.Filename = "SingleLeptonJet_MC_"+j
+				config.Filename = "DileptonLeptonJet_MC_"+j
 
 			if j == "a":
 				config.Default_Campaign = [MCa()]

@@ -30,14 +30,14 @@ def DumpConfig(f, SRCDir, OutDir, config):
     Write(script, f)
 
 
-src = "/home/tnom6927/bsm4tops-gnn-ntuples" 
-Samples = "/CERN/Samples/Transferred/Dilepton/Samples/"
-Output = "/CERN/Samples/Transferred/Dilepton/Output/"
+src = "<insert the source directory>" 
+Samples = "<input Samples>"
+Output = "<output Directory>"
 
 mc = {}
-mc["r9364"] = "/CERN/Samples/Transferred/Dilepton/Configs/DiLeptonJet_MC_a.txt"
-mc["r10201"] = "/CERN/Samples/Transferred/Dilepton/Configs/DiLeptonJet_MC_d.txt"
-mc["r10724"] = "/CERN/Samples/Transferred/Dilepton/Configs/DiLeptonJet_MC_e.txt"
+mc["r9364"] = "<Config Campaign 'a'>"
+mc["r10201"] = "<Config Campaign 'd'>"
+mc["r10724"] = "<Config Campaign 'e'>"
 
 FinDL = {}
 FinProc = {}

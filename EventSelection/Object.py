@@ -58,7 +58,7 @@ class LargeJet(object):
 class Jet(object):
 	def __init__(self):
 		self.CollectionName = "AntiKt4EMPFlowJets_BTagging201903"
-		self.Pt = 28000
+		self.Pt = 25000
 		self.DL1Algo = "FixedCutBEff"
 		self.DL1rAlgo = "FixedCutBEff"
 		self.DL1_wp = [77, 70, 60, 85]
@@ -85,20 +85,20 @@ class Truth(object):
 class MCa(object):
 	def __init__(self):
 		self.ConfigFiles_FS = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.FS.v2/prw.merged.root"
-		self.ConfigFiles_AF = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.AF.v2/prw.merged.root"
+		self.ConfigFiles_AF = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.AF_BSMH.v2/prw.merged.root"
 		self.LumiCalcFiles = ["GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root", 
 				      "GoodRunsLists/data16_13TeV/20180129/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-009.root"]
 class MCd(object):
 	def __init__(self):
-		self.ConfigFiles_FS = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v2/prw.merged.root"
-		self.ConfigFiles_AF = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.AF.v2/prw.merged.root"
+		self.CONFIGFILES_FS = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v2/prw.merged.root"
+		self.ConfigFiles_AF = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d_BSMH.AF.v2/prw.merged.root"
 		self.LumiCalcFiles =  ["GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-010.root"]
 		self.ActualMu_AF    = "GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root"
 		self.ActualMu_FS    = "GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root"
 class MCe(object):
 	def __init__(self):
 		self.ConfigFiles_FS = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16e.FS.v2/prw.merged.root"
-		self.ConfigFiles_AF = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16e.AF.v2/prw.merged.root"
+		self.ConfigFiles_AF = "dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16e.AF_BSMH.v2/prw.merged.root"
 		self.LumiCalcFiles  = ["GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_348885-364292_OflLumi-13TeV-010.root"]
 		self.ActualMu_AF    = "GoodRunsLists/data18_13TeV/20190318/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root"
 		self.ActualMu_FS    = "GoodRunsLists/data18_13TeV/20190318/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root"
@@ -133,6 +133,7 @@ class ConfigContainer(object):
 		self.DoTight = "Both"
 		self.ApplyTightSFsInLooseTree = True
 		self.Systematics = "nominal"
+		self.NominalWeightNames = None
 		self.UseAodMetaData = True
 		self.UseGlobalLeptonTriggerSF = True
 		self.nEvents = -1
@@ -220,6 +221,7 @@ class ConfigContainer(object):
 
 		self.MakeHeader("EXPERIMENTAL")
 		self.Add(self, "Systematics")
+		self.Add(self, "NominalWeightNames")
 		
 		self.MakeHeader("EVENT SAVER")
 		t = ["Format", "Filename", "Events", "FileSetAutoFlushZero"]
