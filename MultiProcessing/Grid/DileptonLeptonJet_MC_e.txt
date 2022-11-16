@@ -111,9 +111,18 @@ OutputFileSetAutoFlushZero True
 ####################################################################################################
 
 # -- MCe
-PRWConfigFiles_FS FourTopsGNNSampleProduction/PRW/user.iconnell.Top.PRW.MC16e.FS.v2/prw.merged.root
-PRWConfigFiles_AF FourTopsGNNSampleProduction/PRW/user.iconnell.Top.PRW.MC16e_BSMH.AF.v2/prw.merged.root
-PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20180129/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-009.root
+#PRWConfigFiles_FS FourTopsGNNSampleProduction/PRW/user.iconnell.Top.PRW.MC16e.FS.v2/prw.merged.root
+#PRWConfigFiles_AF FourTopsGNNSampleProduction/PRW/user.iconnell.Top.PRW.MC16e_BSMH.AF.v2/prw.merged.root
+#PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20180129/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-009.root
+
+# MC16e pileup profile
+PRWConfigFiles_FS dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16e.FS.v2/prw.merged.root
+PRWConfigFiles_AF dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16e.AF.v2/prw.merged.root
+PRWCustomScaleFactor 1.0/1.03:1.0/0.99:1.0/1.07
+# full 2018 dataset (release 21, OflLumi-13TeV-010)
+PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_348885-364292_OflLumi-13TeV-010.root
+PRWActualMu_FS GoodRunsLists/data18_13TeV/20190318/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root
+PRWActualMu_AF GoodRunsLists/data18_13TeV/20190318/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root
 
 ####################################################################################################
 #                                                                                                  #
