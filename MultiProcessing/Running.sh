@@ -12,15 +12,15 @@ function CondorBuild
   echo "queue 1"  >> $1/example.submit
 }
 
-ROOT=$PWD
-mkdir -p $ROOT/Output
-mkdir -p $ROOT/Samples
+ROOT=/import/wu1/tnom6927
+mkdir -p $ROOT/SingleLepton/
+mkdir -p $ROOT/Samples/
 
 cpu=()
 while true
 do
   python ScanSamples.py
-  for i in $ROOT/Output/*
+  for i in $ROOT/SingleLepton/*
   do
     for j in $i/*
     do
@@ -44,7 +44,7 @@ do
         continue
       fi
 
-      if [[ ${#cpu[@]} -ge 7 ]]
+      if [[ ${#cpu[@]} -ge 25 ]]
       then 
         for pid in ${cpu[*]}
         do

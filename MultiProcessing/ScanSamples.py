@@ -30,14 +30,14 @@ def DumpConfig(f, SRCDir, OutDir, config):
     Write(script, f)
 
 
-src = "<insert the source directory>" 
-Samples = "<input Samples>"
-Output = "<output Directory>"
-
+src = "/suphys/tnom6927/bsm4tops-gnn-ntuples/" 
+Samples = "/import/wu1/tnom6927/Samples/"
+Output = "/import/wu1/tnom6927/SingleLepton/"
+				
 mc = {}
-mc["r9364"] = "<Config Campaign 'a'>"
-mc["r10201"] = "<Config Campaign 'd'>"
-mc["r10724"] = "<Config Campaign 'e'>"
+mc["r9364"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/SingleLeptonJet_MC_a.txt"
+mc["r10201"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/SingleLeptonJet_MC_d.txt"
+mc["r10724"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/SingleLeptonJet_MC_e.txt"
 
 FinDL = {}
 FinProc = {}
