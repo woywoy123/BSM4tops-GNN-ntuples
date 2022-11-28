@@ -29,15 +29,15 @@ def DumpConfig(f, SRCDir, OutDir, config):
     ]
     Write(script, f)
 
-
+out = "Dilepton"
 src = "/suphys/tnom6927/bsm4tops-gnn-ntuples/" 
 Samples = "/import/wu1/tnom6927/Samples/"
-Output = "/import/wu1/tnom6927/SingleLepton/"
+Output = "/import/wu1/tnom6927/" + out  + "/"
 				
 mc = {}
-mc["r9364"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/SingleLeptonJet_MC_a.txt"
-mc["r10201"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/SingleLeptonJet_MC_d.txt"
-mc["r10724"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/SingleLeptonJet_MC_e.txt"
+mc["r9364"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/" + out + "_MC_a.txt"
+mc["r10201"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/" + out + "_MC_d.txt"
+mc["r10724"] = "/suphys/tnom6927/bsm4tops-gnn-ntuples/EventSelection/" + out + "_MC_e.txt"
 
 FinDL = {}
 FinProc = {}

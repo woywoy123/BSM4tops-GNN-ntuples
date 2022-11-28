@@ -13,14 +13,15 @@ function CondorBuild
 }
 
 ROOT=/import/wu1/tnom6927
-mkdir -p $ROOT/SingleLepton/
+out=Dilepton
+mkdir -p $ROOT/$out/
 mkdir -p $ROOT/Samples/
 
 cpu=()
 while true
 do
   python ScanSamples.py
-  for i in $ROOT/SingleLepton/*
+  for i in $ROOT/$out/*
   do
     for j in $i/*
     do
@@ -40,7 +41,6 @@ do
       done
       if [[ $ex == "" ]]
       then 
-        sleep 10
         continue
       fi
 
