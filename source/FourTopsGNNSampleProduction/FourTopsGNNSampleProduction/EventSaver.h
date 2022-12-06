@@ -180,8 +180,8 @@ namespace top
           systematicTree -> makeOutputVariable(m_truthjets_TopIndex, "truthjets_TopIndex"); 
 
           // Collect jets 
-          systematicTree -> makeOutputVariable(m_jets_index, "jets_index"); 
-          systematicTree -> makeOutputVariable(m_jets_TopIndex, "jets_TopIndex"); 
+          systematicTree -> makeOutputVariable(m_jets_index, "jet_index"); 
+          systematicTree -> makeOutputVariable(m_jets_TopIndex, "jet_TopIndex"); 
 
           // Truth Tops in Sample 
           systematicTree -> makeOutputVariable(m_top_index, "top_index"); 
