@@ -13,7 +13,7 @@ campaigns = ["a", "d", "e"]
 for camp in campaigns:
   config.code          = 'top-xaod'
   config.settingsFile  = "DileptonLeptonJet_MC_" + camp + ".txt"
-  config.suffix        = 'bsm4t-gnn-bsmh-mc' + camp
+  config.suffix        = 'bsm4t-GNN-bsmh-mc' + camp
   config.mergeType     = 'None' #'None', 'Default' or 'xAOD'
   config.otherOptions  = "--nGBPerJob=20" 
   

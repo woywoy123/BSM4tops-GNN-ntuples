@@ -11,6 +11,9 @@ for i in f:
   i = i.split(":")[1]
   T.append(i)
 
+T = list(set(T))
+
+
 f = open("pileupList.txt", "w")
 f.write("\n".join(T))
 f.close()
