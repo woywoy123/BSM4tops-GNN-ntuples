@@ -167,7 +167,6 @@ namespace top
         for (auto systematicTree : treeManagers())
         {
 
-
           // Collect truth jets
           systematicTree -> makeOutputVariable(m_truthjets_index, "truthjets_index"); 
           systematicTree -> makeOutputVariable(m_truthjets_pt, "truthjets_pt"); 

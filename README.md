@@ -28,18 +28,21 @@ If Grid jobs need to be submitted in bulk, simply naviate into the 'Grid' folder
 - <particle_name>_charge: The charge as per the simulation/reconstruction in AnalysisTop.
 - <particle_name>_pdgid: The PDGID [See here for an elaborate PDGID table](https://pdg.lbl.gov/2007/reviews/montecarlorpp.pdf)
 - <particle_name>_FromRes: Indicates whether the top-quark originates from a resonance - currently supports scalar Higgs (BSMH) and vector boson Z-prime (ZBSM). 
-- <particle_name>_index: The index of the top-quark.
+- <particle_name>_index: The vectorial index of the particle stored. 
+- <particle_name>_btagged: Whether the (truth)jet has been tagged as originating from a b-quark parton (only recorded for truth jets)
+- <particle_name> topquarkcount: Value extracted from the branch, "AntiKt4TruthWZJetsAuxDyn.GhostTQuarksFinalCount" (only recorded for truth jets)
+- <particle_name> wbosoncount: Value extracted from the branch, "AntiKt4TruthWZJetsAuxDyn.GhostWBosonsCount" (only recorded for truth jets)
 - <particle_name>_TopIndex: The index of the top-quark that the particle has been matched with.
-- <particle_name>_ChildIndex: The index of the child that the particle has been matched with (child meaning the FIRST decay products of the top-quark).
-- <particle_name>_TruJetIndex: The index of the truthjet from which this parton was extracted from.
+- <particle_name>_TruthJetIndex: The index of the truthjet from which this parton was extracted from.
+- <particle_name>_ChildIndex: The index of the child that the partons were matched to 
 - <particle_name>_JetIndex: The index of the jet from which this parton was extracted from.
 
 ## Particle Names
 - children: These are the direct decay products of the top-quark. If one of the decay products is a W-boson, the children are used instead.
 - top: The top-quark(s) in the sample after gluon radiation i.e. FSR (Final State Radiation).
 - truthjet: Simulated jets before adding any detector inefficiencies. 
-- truJparton: The partons constituting the truthjet. These are singly matched to individual children (by index) and can be used for debugging the current matching scheme.
 - jet: The detector jets.
+- TJparton: The partons constituting the truthjet. These are singly matched to individual children (by index) and can be used for debugging the current matching scheme.
 - Jparton: Partons contributing to the constructed jets. Again these are singly matched to individual children (by index) and can be used for debugging.
 
 ## Current Matching Scheme of Tops to (Truth)Jets
