@@ -66,6 +66,8 @@ for i in FinDL:
         continue
 
     x = [k for k in SMPL.split("_") if k in mc]
+    if len(x) == 0:
+        continue
     Conf = mc[x[0]]
     DumpConfig(OutDir + "/Out.sh", src, OutDir, Conf) 
     Write([FinDL[i] + ","], OutDir + "/smpl.txt")

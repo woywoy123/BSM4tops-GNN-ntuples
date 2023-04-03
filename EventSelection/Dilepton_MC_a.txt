@@ -18,6 +18,7 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libFourTop
 # OBJECT DEFINITION                                                                                #
 #                                                                                                  #
 ####################################################################################################
+#NEvents 1000
 
 ObjectSelectionName top::ObjectLoaderStandardCuts
 # -- Collections
