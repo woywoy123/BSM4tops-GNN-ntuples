@@ -174,35 +174,31 @@ namespace top
     			return; 
     		}
     		
-    		if (LargeFiles)
-    		{ 
-			MatchingJets(
+    		if (LargeFiles){ 
+	        	MatchingJets(
     		    		Children_Vector, m_truthjets, 
     		    		Children_Index, m_truthjets_index, 
     		    		&m_TJparton_ChildIndex, &m_TJparton_index, &m_TJparton_TruthJetIndex, 
     		    		&m_TJparton_pt, &m_TJparton_eta, &m_TJparton_phi, &m_TJparton_e, 
-    		    		&m_TJparton_pdgid, &m_TJparton_charge
-    		    ); 
+    		    		&m_TJparton_charge, &m_TJparton_pdgid
+                        ); 
 
     		   	MatchingJets(
     		    		Children_Vector, &m_jets, 
     		    		Children_Index, m_jets_index, 
     		    		&m_Jparton_ChildIndex, &m_Jparton_index, &m_Jparton_JetIndex, 
     		    		&m_Jparton_pt, &m_Jparton_eta, &m_Jparton_phi, &m_Jparton_e, 
-    		    		&m_Jparton_pdgid, &m_Jparton_charge
-    		    );
+    		    		&m_Jparton_charge, &m_Jparton_pdgid
+    		        );
     		}
 
-    		if (DecayChainFiles)
-    		{
-    			for (unsigned int i(0); i < FinalTops.size(); ++i)
-    			{
+    		if (DecayChainFiles){
+    			for (unsigned int i(0); i < FinalTops.size(); ++i){
     		       		const xAOD::TruthParticle* _top = FinalTops[i];
     		       		std::vector<const xAOD::TruthParticle*> ParticleVector;  
     		       		std::vector<int> ParticleDecayIndex; 
     		       		ParticleID::GetPath(_top, 0, &ParticleVector, &ParticleDecayIndex); 
-				for (unsigned int j(0); j < ParticleVector.size(); ++j)
-				{
+				for (unsigned int j(0); j < ParticleVector.size(); ++j){
 					// Here we want to capture the top index!
 					m_DCTopIndex.push_back(i); 
 					m_DCDecayIndex.push_back(ParticleDecayIndex[j]); 

@@ -9,7 +9,7 @@ config = TopExamples.grid.Config()
 config.gridUsername = "tnommens"
 # skip shower check because people updated TDP in 21.2.168 but did not think of updating the HARD-CODED :( showering names in the grid submission script.
 
-campaigns = ["a", "d", "e"]
+campaigns = ["a"] #, "d", "e"]
 for camp in campaigns:
   config.code          = 'top-xaod'
   config.settingsFile  = "DileptonLeptonJet_MC_" + camp + ".txt"
@@ -21,7 +21,7 @@ for camp in campaigns:
   
   def List(campi):
       names = [
-      "ttH_mc16" + campi
+      "Zmumu_mc16" + campi
       ]
       return names
   out = List(camp)

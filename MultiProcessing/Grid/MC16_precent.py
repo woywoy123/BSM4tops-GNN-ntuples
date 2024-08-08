@@ -1,31 +1,18 @@
 import TopExamples.grid
 
-TopExamples.grid.Add("ttH_mc16a").datasets = [
-  "mc16_13TeV.312446.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m1000.deriv.DAOD_TOPQ1.e7743_a875_r9364_p4031", 
-  "mc16_13TeV.312444.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m800.deriv.DAOD_TOPQ1.e7743_a875_r9364_p4031", 
-  "mc16_13TeV.312441.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m500.deriv.DAOD_TOPQ1.e7743_a875_r9364_p4031", 
-  "mc16_13TeV.312442.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m600.deriv.DAOD_TOPQ1.e7743_a875_r9364_p4031", 
-  "mc16_13TeV.312443.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m700.deriv.DAOD_TOPQ1.e7743_a875_r9364_p4031", 
-  "mc16_13TeV.312445.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m900.deriv.DAOD_TOPQ1.e7743_a875_r9364_p4031", 
-  "mc16_13TeV.312440.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m400.deriv.DAOD_TOPQ1.e7743_a875_r9364_p4031", 
-]
-
-TopExamples.grid.Add("ttH_mc16d").datasets = [
-  "mc16_13TeV.312446.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m1000.deriv.DAOD_TOPQ1.e7743_a875_r10201_p4031", 
-  "mc16_13TeV.312440.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m400.deriv.DAOD_TOPQ1.e7743_a875_r10201_p4031", 
-  "mc16_13TeV.312443.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m700.deriv.DAOD_TOPQ1.e7743_a875_r10201_p4031", 
-  "mc16_13TeV.312445.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m900.deriv.DAOD_TOPQ1.e7743_a875_r10201_p4031", 
-  "mc16_13TeV.312442.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m600.deriv.DAOD_TOPQ1.e7743_a875_r10201_p4031", 
-  "mc16_13TeV.312444.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m800.deriv.DAOD_TOPQ1.e7743_a875_r10201_p4031", 
-  "mc16_13TeV.312441.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m500.deriv.DAOD_TOPQ1.e7743_a875_r10201_p4031", 
-]
-
-TopExamples.grid.Add("ttH_mc16e").datasets = [
-  "mc16_13TeV.312445.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m900.deriv.DAOD_TOPQ1.e7743_a875_r10724_p4031", 
-  "mc16_13TeV.312443.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m700.deriv.DAOD_TOPQ1.e7743_a875_r10724_p4031", 
-  "mc16_13TeV.312446.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m1000.deriv.DAOD_TOPQ1.e7743_a875_r10724_p4031", 
-  "mc16_13TeV.312440.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m400.deriv.DAOD_TOPQ1.e7743_a875_r10724_p4031", 
-  "mc16_13TeV.312441.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m500.deriv.DAOD_TOPQ1.e7743_a875_r10724_p4031", 
-  "mc16_13TeV.312442.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m600.deriv.DAOD_TOPQ1.e7743_a875_r10724_p4031", 
-  "mc16_13TeV.312444.MadGraphPythia8EvtGen_noallhad_ttH_tttt_m800.deriv.DAOD_TOPQ1.e7743_a875_r10724_p4031", 
+TopExamples.grid.Add("Zmumu_mc16a").datasets = [
+        "mc16_13TeV.364100.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CVetoBVeto.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364101.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_CFilterBVeto.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364102.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV0_70_BFilter.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364103.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CVetoBVeto.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364104.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_CFilterBVeto.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364105.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV70_140_BFilter.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364106.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CVetoBVeto.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364107.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_CFilterBVeto.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364108.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV140_280_BFilter.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364109.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CVetoBVeto.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364110.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_CFilterBVeto.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364111.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV280_500_BFilter.deriv.DAOD_TOPQ1.e5271_e5984_s3126_r9364_r9315_p4512",
+        "mc16_13TeV.364112.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV500_1000.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
+        "mc16_13TeV.364113.Sherpa_221_NNPDF30NNLO_Zmumu_MAXHTPTV1000_E_CMS.deriv.DAOD_TOPQ1.e5271_s3126_r9364_p4512",
 ]
